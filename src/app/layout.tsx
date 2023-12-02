@@ -1,8 +1,12 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
+import '../frontend/styles/globals.css'
+import { Inter as FontSans } from 'next/font/google'
+import { cn } from '@/design-system/lib/utils'
+import { ThemeProvider } from '@/design-system/theme/theme-provider'
+import { ApolloProvider } from '@apollo/client'
+import apolloClient from '@/frontend/infra/Apollo/ApolloClient'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = FontSans({ subsets: ['latin'], variable: '--font-sans' })
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,7 +20,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body
+        className={cn(
+          'min-h-screen bg-background font-sans antialiased',
+          inter.variable
+        )}
+      >
+        {/* <ApolloProvider client={apolloClient}> */}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+        {/* </ApolloProvider> */}
+      </body>
     </html>
   )
 }
