@@ -2,11 +2,11 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { hash } from 'bcryptjs'
 import { NextRequest, NextResponse } from 'next/server'
 import { ZodError } from 'zod'
+import appPrismaClient from '@/backend/infra/appPrismaClient'
 import {
   RegisterUserInput,
   RegisterUserSchema,
 } from '@/frontend/features/Auth/validations/user.schema'
-import appPrismaClient from '@/backend/infra/appPrismaClient'
 import getErrorResponse from '@/frontend/helpers/getErrorResponse'
 
 export async function POST(req: NextRequest) {
