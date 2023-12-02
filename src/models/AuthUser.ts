@@ -1,4 +1,4 @@
-import Entity from '@/types/Entity'
+import Entity from './Entity'
 import User from './User'
 
 type UserProps = {

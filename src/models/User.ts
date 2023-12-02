@@ -1,5 +1,5 @@
-import Entity from '@/types/Entity'
 import { User as PrismaUser } from '@prisma/client'
+import Entity from './Entity'
 
 type UserProps = PrismaUser
 

@@ -1,7 +1,7 @@
 import UserRepository from '@/backend/features/User/UserRepository'
-import Usecase from '@/types/Usecase'
 import User from '@/models/User'
 import { GetUserDetailValidation } from './GetUserDetailValidation'
+import Usecase from '@/models/Usecase'
 
 export type GetUserDetailUsecaseRequest = {
   id: User['id'] | null
