@@ -62,7 +62,7 @@ export default function KanbanBoard({
   )
 
   return (
-    <div className="flex h-full w-full">
+    <div>
       <DndContext
         sensors={sensors}
         onDragStart={(event) =>

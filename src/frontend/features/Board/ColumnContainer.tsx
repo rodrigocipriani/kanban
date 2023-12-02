@@ -2,6 +2,7 @@ import { SortableContext, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useMemo, useState } from 'react'
 
+import { Button } from '@/design-system/ui/Button'
 import Icon from '@/design-system/ui/Icon'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
@@ -72,7 +73,7 @@ function ColumnContainer({
     <div
       ref={setNodeRef}
       style={style}
-      className="flex h-[500px] max-h-[500px] w-[350px] flex-col rounded-md bg-orange-600"
+      className="flex h-fit max-h-max w-[350px] flex-col overflow-y-visible rounded-md border border-orange-400"
     >
       <div
         {...attributes}
@@ -80,7 +81,7 @@ function ColumnContainer({
         onClick={() => {
           setEditMode(true)
         }}
-        className="flex h-[60px] cursor-grab items-center justify-between rounded-md rounded-b-none border-4 bg-blue-500 p-3 text-base font-bold"
+        className="sticky flex h-[60px] cursor-grab items-center justify-between rounded-md rounded-b-none border-4 bg-blue-500 p-3 text-base font-bold"
       >
         <div className="flex gap-2">
           <div className="flex items-center justify-center rounded-md px-2 py-1 text-sm">
@@ -113,7 +114,7 @@ function ColumnContainer({
         </button>
       </div>
 
-      <div className="flex flex-grow flex-col gap-4 overflow-y-auto overflow-x-hidden p-2">
+      <div className="flex flex-col gap-4 border border-yellow-400 p-2">
         <SortableContext items={tasksIds}>
           {tasks.map((task) => (
             <TaskCard
@@ -125,15 +126,14 @@ function ColumnContainer({
           ))}
         </SortableContext>
       </div>
-      <button
-        className="flex items-center gap-2 rounded-md border-2 border-pink-400 p-4  hover:bg-yellow-400 hover:text-rose-500 active:bg-black"
+      <Button
         onClick={() => {
           createTask(column.id)
         }}
       >
         <Icon icon="plus" />
         Add task
-      </button>
+      </Button>
     </div>
   )
 }

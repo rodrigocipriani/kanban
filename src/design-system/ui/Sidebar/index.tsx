@@ -20,8 +20,8 @@ export default function Sidebar({
   showMenu,
 }: Props) {
   return (
-    <div className="flex min-h-screen w-full">
-      <div className="block sm:hidden min-h-screen w-full">
+    <div className="flex">
+      <div className="block w-full sm:hidden">
         <SidebarFloatContainer
           menu={
             <SidebarMenu
@@ -34,7 +34,7 @@ export default function Sidebar({
           {children}
         </SidebarFloatContainer>
       </div>
-      <div className="hidden sm:block min-h-screen w-full">
+      <div className="hidden w-full sm:block">
         {showMenu ? (
           <SidebarPlacedContainer
             menu={

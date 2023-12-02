@@ -16,9 +16,9 @@ type Props = {
 
 export default function SidebarMenu({ menuOptions, header, footer }: Props) {
   return (
-    <div className="flex flex-col justify-between h-full w-full">
+    <div className="flex h-full w-full flex-col justify-between">
       {header && <div className="p-2">{header}</div>}
-      <ul className="flex flex-col w-full shrink h-full pt-8">
+      <ul className="flex h-full w-full shrink flex-col pt-8">
         {menuOptions.map((menuOption) => (
           <li key={menuOption.label} className="w-full">
             <Button
