@@ -2,7 +2,7 @@ import BoardContainer from '@/frontend/features/Board/BoardContainer'
 
 export default function Home() {
   return (
-    <div className="p-8">
+    <div className="h-full w-full p-4">
       <BoardContainer />
     </div>
   )
