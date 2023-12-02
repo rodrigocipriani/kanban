@@ -2,7 +2,7 @@
 
 import { SessionProvider } from 'next-auth/react'
 import React from 'react'
-import AuthUser from '@/backend/models/AuthUser'
+import AuthUser from '@/shared/models/AuthUser'
 import useAuthStore from './useAuthStore'
 
 type Props = {

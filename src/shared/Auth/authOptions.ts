@@ -29,6 +29,7 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
+        // TODO: The user repository should be injected or something but not instantiated here on shared from backend
         const userRepository = new UserRepository()
         const user = await userRepository.findByEmail({
           email: credentials.email,

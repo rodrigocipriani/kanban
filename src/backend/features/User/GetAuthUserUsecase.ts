@@ -1,40 +1,30 @@
-import { getServerSession } from 'next-auth'
-import Service, { ServiceResponse } from '@/backend/models/Service'
-import GetAuthUserEndpoint from '@/frontend/infra/NextEndpoints/GetAuthUserEndpoint'
+import Usecase from '@/backend/models/Usecase'
 import { authOptions } from '@/shared/Auth/authOptions'
 import User from '@/shared/entities/User'
+import { getServerSession } from 'next-auth'
 
-type GetAuthUserServiceRequest = never
+type GetAuthUserUsecaseRequest = never
 
-type GetAuthUserServiceResponse = {
+type GetAuthUserUsecaseResponse = {
   user: User
 }
 
-export default class GetAuthUserService extends Service<
-  GetAuthUserServiceRequest,
-  GetAuthUserServiceResponse
+export default class GetAuthUserUsecase extends Usecase<
+  GetAuthUserUsecaseRequest,
+  GetAuthUserUsecaseResponse
 > {
-  private readonly endpoint: GetAuthUserEndpoint
-
-  constructor({ endpoint }: { endpoint?: GetAuthUserEndpoint } = {}) {
+  constructor() {
     super()
-    this.endpoint = endpoint || new GetAuthUserEndpoint()
   }
 
-  async execute(): Promise<ServiceResponse<GetAuthUserServiceResponse>> {
-    try {
-      const session = await getServerSession(authOptions)
-      const user = session?.user as User
+  async execute(): Promise<GetAuthUserUsecaseResponse> {
+    const session = await getServerSession(authOptions)
+    const user = session?.user as User
 
-      if (!user) throw new Error('User is not logged in')
+    if (!user) throw new Error('User is not logged in')
 
-      return {
-        data: {
-          user,
-        },
-      }
-    } catch (error) {
-      return this.handleError(error)
+    return {
+      user,
     }
   }
 }

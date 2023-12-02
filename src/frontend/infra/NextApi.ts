@@ -1,4 +1,4 @@
-import Api from '@/backend/models/Api'
+import Api from '@/frontend/models/Api'
 
 class NextApi extends Api {
   constructor() {

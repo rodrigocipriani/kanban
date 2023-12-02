@@ -1,6 +1,6 @@
 import { User as PrismaUser } from '@prisma/client'
 
-import Entity from '@/backend/models/Entity'
+import Entity from '@/shared/models/Entity'
 
 type UserProps = PrismaUser
 

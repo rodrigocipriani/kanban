@@ -1,10 +1,8 @@
-
-import Endpoint, { EndpointResponse } from '@/backend/models/Endpoint'
+import Endpoint, { EndpointResponse } from '@/frontend/models/Endpoint'
 
 import Column from '@/shared/entities/Column'
 
 import { NextApi } from '../NextApi'
-
 
 type GetColumnsEndpointRequest = never
 

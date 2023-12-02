@@ -1,4 +1,4 @@
-import Service, { ServiceResponse } from '@/backend/models/Service'
+import Service, { ServiceResponse } from '@/frontend/models/Service'
 
 import GetTasksEndpoint from '@/frontend/infra/NextEndpoints/GetTasksEndpoint'
 

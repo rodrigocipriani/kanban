@@ -1,10 +1,8 @@
-
-import Endpoint, { EndpointResponse } from '@/backend/models/Endpoint'
+import Endpoint, { EndpointResponse } from '@/frontend/models/Endpoint'
 
 import Task from '@/shared/entities/Task'
 
 import { NextApi } from '../NextApi'
-
 
 type GetTasksEndpointRequest = never
 

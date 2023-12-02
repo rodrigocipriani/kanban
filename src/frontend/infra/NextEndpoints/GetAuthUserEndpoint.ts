@@ -1,4 +1,4 @@
-import Endpoint, { EndpointResponse } from '@/backend/models/Endpoint'
+import Endpoint, { EndpointResponse } from '@/frontend/models/Endpoint'
 
 import User from '@/shared/entities/User'
 

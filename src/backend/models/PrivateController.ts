@@ -1,4 +1,4 @@
-import GetAuthUserService from '@/backend/features/User/GetAuthUserUsecase'
+import GetAuthUserUsecase from '@/backend/features/User/GetAuthUserUsecase'
 import User from '@/shared/entities/User'
 import { Controller, ControllerResponse } from './Controller'
 
@@ -14,8 +14,8 @@ export default abstract class PrivateController<
 
   public async execute(request?: TRequest) {
     try {
-      const response = await new GetAuthUserService().execute()
-      const authUserId = response.data?.user?.id
+      const response = await new GetAuthUserUsecase().execute()
+      const authUserId = response.user?.id
 
       if (!authUserId) {
         throw new Error('User is not logged in')

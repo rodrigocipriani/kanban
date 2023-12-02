@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { useToast } from '@/design-system/ui/Toast/use-toast'
 
-import { ServiceResponse } from '@/backend/models/Service'
+import { ServiceResponse } from '@/frontend/models/Service'
 
 type Service<TParams, TResult> = {
   execute: (params?: TParams) => Promise<ServiceResponse<TResult>>

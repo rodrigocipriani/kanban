@@ -1,5 +1,5 @@
 import { Inter as FontSans } from 'next/font/google'
-import GetAuthUserService from '@/backend/features/User/GetAuthUserUsecase'
+import GetAuthUserUsecase from '@/backend/features/User/GetAuthUserUsecase'
 import { NextAuthProvider } from '@/frontend/features/Auth/NextAuthProvider'
 import AppContainer from '@/frontend/features/Layout/AppContainer'
 import '@/frontend/styles/globals.css'
@@ -18,8 +18,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const response = await new GetAuthUserService().execute()
-  const authUser = response.data?.user
+  const response = await new GetAuthUserUsecase().execute()
+  const authUser = response.user
 
   return (
     <html lang="en">
