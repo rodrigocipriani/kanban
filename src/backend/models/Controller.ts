@@ -1,7 +1,7 @@
 import { ZodError } from 'zod'
 import zodIssuesToArray from '@/shared/utilities/zodIssuesToArray'
 import { ResponseMessage } from '../../frontend/models/ResponseMessage'
-import { ResponseStatuses } from './ResponseStatuses'
+import { ResponseStatuses } from '../../shared/models/ResponseStatuses'
 
 export class ControllerResponse<TResponse> {
   data?: TResponse
