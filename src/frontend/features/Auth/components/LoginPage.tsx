@@ -8,7 +8,7 @@ export default function LoginPage() {
     <section className="grid h-screen grid-cols-1">
       <div className="m-auto">
         <Typography variant="h1" className="text-center">
-          Micro1 Kanban
+          Kanban
         </Typography>
       </div>
       <div className="w-full">

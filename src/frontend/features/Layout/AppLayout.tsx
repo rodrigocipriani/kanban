@@ -37,23 +37,21 @@ export default function AppLayout({ children }: Props) {
   ]
 
   return (
-    <div>
-      <Sidebar
-        header={<div>Micro1 Kanban</div>}
-        footer={
-          <div>
-            <div>Hello, {authUser ? authUser.name : ''}</div>
-            <div className="flex w-full flex-row justify-end">
-              <ThemeSwitch />
-              <LogoutButton />
-            </div>
+    <Sidebar
+      header={<div>Kanban</div>}
+      footer={
+        <div>
+          <div>Hello, {authUser ? authUser.name : ''}</div>
+          <div className="flex w-full flex-row justify-end">
+            <ThemeSwitch />
+            <LogoutButton />
           </div>
-        }
-        menuOptions={MENU_OPTIONS}
-        showMenu={!!authUser}
-      >
-        {children}
-      </Sidebar>
-    </div>
+        </div>
+      }
+      menuOptions={MENU_OPTIONS}
+      showMenu={!!authUser}
+    >
+      {children}
+    </Sidebar>
   )
 }

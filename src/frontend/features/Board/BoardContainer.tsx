@@ -59,13 +59,11 @@ export default function BoardContainer() {
   }
 
   return (
-    <div>
-      <KanbanBoard
-        columns={columns}
-        tasks={tasks}
-        setColumns={handleSetColumns}
-        setTasks={handleSetTasks}
-      />
-    </div>
+    <KanbanBoard
+      columns={columns}
+      tasks={tasks}
+      setColumns={handleSetColumns}
+      setTasks={handleSetTasks}
+    />
   )
 }

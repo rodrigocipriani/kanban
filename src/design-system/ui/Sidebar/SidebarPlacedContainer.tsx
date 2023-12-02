@@ -7,11 +7,11 @@ type Props = {
 
 export default function SidebarPlacedContainer({ children, menu }: Props) {
   return (
-    <div className="flex h-full">
-      <section className="flex-none max-w-xs w-96 bg-background p-4 h-full">
+    <div className="flex h-full w-full">
+      <section className="h-full w-96 max-w-xs flex-none bg-background p-4">
         {menu}
       </section>
-      <main className="shrink w-full h-full">{children}</main>
+      <main className="h-full w-full shrink overflow-x-auto">{children}</main>
     </div>
   )
 }
