@@ -1,6 +1,5 @@
 'use client'
 
-
 import {
   DndContext,
   DragEndEvent,
@@ -15,11 +14,10 @@ import { SortableContext, arrayMove } from '@dnd-kit/sortable'
 import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 
+import Icon from '@/design-system/ui/Icon'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
 import { Id, generateId } from '@/shared/types/Id'
-
-import PlusIcon from '../../icons/PlusIcon'
 
 import ColumnContainer from './ColumnContainer'
 import TaskCard from './TaskCard'
@@ -145,7 +143,7 @@ export default function KanbanBoard({
             }}
             className="flex h-[60px] w-[350px]  min-w-[350px] cursor-pointer gap-2 rounded-lg border-2 p-4 ring-rose-500 hover:ring-2"
           >
-            <PlusIcon />
+            <Icon icon="plus" />
             Add Column
           </button>
         </div>

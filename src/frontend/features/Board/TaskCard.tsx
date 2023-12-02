@@ -1,12 +1,10 @@
-
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useState } from 'react'
 
+import Icon from '@/design-system/ui/Icon'
 import Task from '@/shared/entities/Task'
 import { Id } from '@/shared/types/Id'
-
-import TrashIcon from '../../icons/TrashIcon'
 
 interface Props {
   task: Task
@@ -106,7 +104,7 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
           }}
           className="absolute right-4 top-1/2 -translate-y-1/2 rounded bg-orange-400 stroke-white p-2 opacity-60 hover:opacity-100"
         >
-          <TrashIcon />
+          <Icon icon="trash" />
         </button>
       )}
     </div>

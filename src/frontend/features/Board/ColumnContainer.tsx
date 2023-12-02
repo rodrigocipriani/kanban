@@ -1,14 +1,11 @@
-
 import { SortableContext, useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useMemo, useState } from 'react'
 
+import Icon from '@/design-system/ui/Icon'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
 import { Id } from '@/shared/types/Id'
-
-import PlusIcon from '../../icons/PlusIcon'
-import TrashIcon from '../../icons/TrashIcon'
 
 import TaskCard from './TaskCard'
 
@@ -112,7 +109,7 @@ function ColumnContainer({
           }}
           className="rounded  stroke-gray-500  px-1 py-2 hover:bg-slate-600 hover:stroke-white"
         >
-          <TrashIcon />
+          <Icon icon="trash" />
         </button>
       </div>
 
@@ -134,7 +131,7 @@ function ColumnContainer({
           createTask(column.id)
         }}
       >
-        <PlusIcon />
+        <Icon icon="plus" />
         Add task
       </button>
     </div>

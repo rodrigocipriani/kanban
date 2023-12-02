@@ -1,7 +1,7 @@
+import { getServerSession } from 'next-auth'
 import Usecase from '@/backend/models/Usecase'
 import { authOptions } from '@/shared/Auth/authOptions'
 import User from '@/shared/entities/User'
-import { getServerSession } from 'next-auth'
 
 type GetAuthUserUsecaseRequest = never
 

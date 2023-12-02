@@ -1,8 +1,8 @@
 import { ZodError } from 'zod'
 import zodIssuesToArray from '@/shared/utilities/zodIssuesToArray'
+import { ResponseStatuses } from '../../backend/models/ResponseStatuses'
 import Api from './Api'
 import { ResponseMessage } from './ResponseMessage'
-import { ResponseStatuses } from '../../backend/models/ResponseStatuses'
 
 export class EndpointResponse<TData> {
   data?: TData

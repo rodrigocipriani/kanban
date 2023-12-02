@@ -1,6 +1,6 @@
+import GetColumnsEndpoint from '@/frontend/infra/NextEndpoints/GetColumnsEndpoint'
 import Service, { ServiceResponse } from '@/frontend/models/Service'
 
-import GetColumnsEndpoint from '@/frontend/infra/NextEndpoints/GetColumnsEndpoint'
 
 import Column from '@/shared/entities/Column'
 

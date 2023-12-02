@@ -1,6 +1,6 @@
 import isServerSide from '@/shared/utilities/isServerSide'
-import { EndpointResponse } from './Endpoint'
 import { ResponseStatuses } from '../../backend/models/ResponseStatuses'
+import { EndpointResponse } from './Endpoint'
 
 export type ApiContructorProps = {
   host?: string

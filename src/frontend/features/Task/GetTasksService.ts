@@ -1,6 +1,6 @@
+import GetTasksEndpoint from '@/frontend/infra/NextEndpoints/GetTasksEndpoint'
 import Service, { ServiceResponse } from '@/frontend/models/Service'
 
-import GetTasksEndpoint from '@/frontend/infra/NextEndpoints/GetTasksEndpoint'
 
 import Task from '@/shared/entities/Task'
 

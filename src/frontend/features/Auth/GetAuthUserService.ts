@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth'
-import Service, { ServiceResponse } from '@/frontend/models/Service'
 import GetAuthUserEndpoint from '@/frontend/infra/NextEndpoints/GetAuthUserEndpoint'
+import Service, { ServiceResponse } from '@/frontend/models/Service'
 import { authOptions } from '@/shared/Auth/authOptions'
 import User from '@/shared/entities/User'
 
