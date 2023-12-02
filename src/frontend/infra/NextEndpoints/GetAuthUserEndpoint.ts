@@ -1,30 +1,32 @@
-import User from "@/models/User";
-import { NextApi } from "../NextApi";
-import Endpoint, { EndpointResponse } from "@/models/Endpoint";
+import Endpoint, { EndpointResponse } from '@/backend/models/Endpoint'
 
-type GetAuthUserEndpointRequest = never;
+import User from '@/shared/entities/User'
+
+import { NextApi } from '../NextApi'
+
+type GetAuthUserEndpointRequest = never
 
 type GetAuthUserEndpointResponse = {
-  user: User;
-};
+  user: User
+}
 
 export default class GetAuthUserEndpoint extends Endpoint<
   GetAuthUserEndpointRequest,
   GetAuthUserEndpointResponse
 > {
-  private readonly path = "/users/me";
+  private readonly path = '/users/me'
 
   constructor() {
-    super({ api: new NextApi() });
+    super({ api: new NextApi() })
   }
 
   public async execute(): Promise<
     EndpointResponse<GetAuthUserEndpointResponse>
   > {
     try {
-      return await this.api.get<GetAuthUserEndpointResponse>(this.path);
+      return await this.api.get<GetAuthUserEndpointResponse>(this.path)
     } catch (error) {
-      return this.handleError(error);
+      return this.handleError(error)
     }
   }
 }

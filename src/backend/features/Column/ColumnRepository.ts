@@ -1,9 +1,10 @@
 import appPrismaClient, {
   AppPrismaClient,
 } from '@/backend/infra/appPrismaClient'
-import Column from '@/models/Column'
-import Repository from '@/models/Repository'
-import User from '@/models/User'
+import Repository from '@/backend/models/Repository'
+
+import Column from '@/shared/entities/Column'
+import User from '@/shared/entities/User'
 
 export default class ColumnRepository extends Repository<AppPrismaClient> {
   constructor({ client }: { client?: AppPrismaClient } = {}) {

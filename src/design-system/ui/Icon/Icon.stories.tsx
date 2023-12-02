@@ -1,5 +1,7 @@
-import React from 'react'
 import { Meta } from '@storybook/react'
+import React from 'react'
+
+
 import Icon, { Icons } from '.'
 
 const meta: Meta = {

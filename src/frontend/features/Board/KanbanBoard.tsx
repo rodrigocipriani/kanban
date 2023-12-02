@@ -1,8 +1,6 @@
 'use client'
 
-import Column from '@/models/Column'
-import { Id, generateId } from '@/types/Id'
-import Task from '@/models/Task'
+
 import {
   DndContext,
   DragEndEvent,
@@ -16,7 +14,13 @@ import {
 import { SortableContext, arrayMove } from '@dnd-kit/sortable'
 import { useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
+
+import Column from '@/shared/entities/Column'
+import Task from '@/shared/entities/Task'
+import { Id, generateId } from '@/shared/types/Id'
+
 import PlusIcon from '../../icons/PlusIcon'
+
 import ColumnContainer from './ColumnContainer'
 import TaskCard from './TaskCard'
 

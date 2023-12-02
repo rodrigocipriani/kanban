@@ -1,12 +1,16 @@
+
 import { SortableContext, useSortable } from '@dnd-kit/sortable'
-import TrashIcon from '../../icons/TrashIcon'
 import { CSS } from '@dnd-kit/utilities'
 import { useMemo, useState } from 'react'
+
+import Column from '@/shared/entities/Column'
+import Task from '@/shared/entities/Task'
+import { Id } from '@/shared/types/Id'
+
 import PlusIcon from '../../icons/PlusIcon'
+import TrashIcon from '../../icons/TrashIcon'
+
 import TaskCard from './TaskCard'
-import Column from '@/models/Column'
-import { Id } from '@/types/Id'
-import Task from '@/models/Task'
 
 interface Props {
   column: Column

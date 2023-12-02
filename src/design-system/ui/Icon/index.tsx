@@ -1,7 +1,7 @@
+import { IconProps } from './icons/IconProps'
+import { ExitIcon } from './icons/exit'
 import { MoonIcon } from './icons/moon'
 import { SunIcon } from './icons/sun'
-import { ExitIcon } from './icons/exit'
-import { IconProps } from './icons/IconProps'
 
 type Props = {
   icon: keyof typeof Icons

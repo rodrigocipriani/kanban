@@ -1,8 +1,11 @@
-import Task from '@/models/Task'
-import { Id } from '@/types/Id'
+
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useState } from 'react'
+
+import Task from '@/shared/entities/Task'
+import { Id } from '@/shared/types/Id'
+
 import TrashIcon from '../../icons/TrashIcon'
 
 interface Props {

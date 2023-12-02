@@ -1,7 +1,7 @@
+import { User } from '@prisma/client'
 import UserRepository from '@/backend/features/User/UserRepository'
-import User from '@/models/User'
+import Usecase from '@/backend/models/Usecase'
 import { GetUserDetailValidation } from './GetUserDetailValidation'
-import Usecase from '@/models/Usecase'
 
 export type GetUserDetailUsecaseRequest = {
   id: User['id'] | null

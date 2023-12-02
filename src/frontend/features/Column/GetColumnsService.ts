@@ -1,35 +1,37 @@
-import GetColumnsEndpoint from "@/frontend/infra/NextEndpoints/GetColumnsEndpoint";
-import Service, { ServiceResponse } from "@/models/Service";
-import Column from "@/models/Column";
+import Service, { ServiceResponse } from '@/backend/models/Service'
 
-type GetColumnsServiceRequest = never;
+import GetColumnsEndpoint from '@/frontend/infra/NextEndpoints/GetColumnsEndpoint'
+
+import Column from '@/shared/entities/Column'
+
+type GetColumnsServiceRequest = never
 
 type GetColumnsServiceResponse = {
-  columns: Column[];
-};
+  columns: Column[]
+}
 
 export default class GetColumnsService extends Service<
   GetColumnsServiceRequest,
   GetColumnsServiceResponse
 > {
-  private readonly endpoint: GetColumnsEndpoint;
+  private readonly endpoint: GetColumnsEndpoint
 
   constructor({ endpoint }: { endpoint?: GetColumnsEndpoint } = {}) {
-    super();
-    this.endpoint = endpoint || new GetColumnsEndpoint();
+    super()
+    this.endpoint = endpoint || new GetColumnsEndpoint()
   }
 
   async execute(): Promise<ServiceResponse<GetColumnsServiceResponse>> {
     try {
-      const response = await new GetColumnsEndpoint().execute();
-      const columns = response.data?.columns || [];
+      const response = await new GetColumnsEndpoint().execute()
+      const columns = response.data?.columns || []
       return {
         data: {
           columns,
         },
-      };
+      }
     } catch (error) {
-      return this.handleError(error);
+      return this.handleError(error)
     }
   }
 }

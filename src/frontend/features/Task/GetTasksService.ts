@@ -1,6 +1,8 @@
+import Service, { ServiceResponse } from '@/backend/models/Service'
+
 import GetTasksEndpoint from '@/frontend/infra/NextEndpoints/GetTasksEndpoint'
-import Service, { ServiceResponse } from '@/models/Service'
-import Task from '@/models/Task'
+
+import Task from '@/shared/entities/Task'
 
 type GetTasksServiceRequest = never
 
