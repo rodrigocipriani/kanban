@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    // ... (other tasks)
+    {
+      "label": "TypeScript Check",
+      "type": "shell",
+      "command": "tsc", // TypeScript compiler
+      "args": [
+        "--noEmit", // Don't output files
+        "--project",
+        "./tsconfig.json" // Specify your tsconfig file
+      ],
+      "problemMatcher": "$tsc", // Use the TypeScript problem matcher
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}
