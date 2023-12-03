@@ -19,7 +19,7 @@ export default class TaskRepository extends Repository<AppPrismaClient> {
     authUserId: User['id']
   }): Promise<Task[]> {
     const tasks = await this.client.task.findMany({
-      where: { createdById: authUserId, columnId },
+      where: { createdByUserId: authUserId, columnId },
     })
 
     return tasks.map((task) => new Task(task as Task))

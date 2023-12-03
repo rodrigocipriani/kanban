@@ -8,7 +8,8 @@ CREATE TABLE "User" (
     "photo" TEXT DEFAULT 'default.png',
     "verified" BOOLEAN DEFAULT false,
     "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME
+    "updatedAt" DATETIME,
+    "deletedAt" DATETIME
 );
 
 -- CreateTable
@@ -16,23 +17,25 @@ CREATE TABLE "Column" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "title" TEXT NOT NULL,
     "order" INTEGER DEFAULT 9999,
-    "content" TEXT,
+    "createdByUserId" TEXT NOT NULL,
     "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME,
-    "userId" TEXT NOT NULL,
-    CONSTRAINT "Column_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "deletedAt" DATETIME,
+    CONSTRAINT "Column_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "Task" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "title" TEXT NOT NULL,
+    "content" TEXT,
     "order" INTEGER DEFAULT 9999,
+    "columnId" TEXT NOT NULL,
+    "createdByUserId" TEXT NOT NULL,
     "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME,
-    "columnId" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
-    CONSTRAINT "Task_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    "deletedAt" DATETIME,
+    CONSTRAINT "Task_createdByUserId_fkey" FOREIGN KEY ("createdByUserId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "Task_columnId_fkey" FOREIGN KEY ("columnId") REFERENCES "Column" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 

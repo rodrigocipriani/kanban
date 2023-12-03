@@ -17,30 +17,36 @@ model User {
   verified  Boolean?  @default(false)
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
-  Column    Column[]
-  Task      Task[]
+  deletedAt DateTime?
+
+  Column Column[]
+  Task   Task[]
 }
 
 model Column {
-  id        String    @id @unique @default(uuid())
-  title     String
-  order     Int?      @default(9999)
-  content   String?
-  createdBy User      @relation(fields: [userId], references: [id])
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  id              String    @id @unique @default(uuid())
+  title           String
+  order           Int?      @default(9999)
+  createdByUserId String
+  createdAt       DateTime? @default(now())
+  updatedAt       DateTime? @updatedAt
+  deletedAt       DateTime?
+
+  createdBy User   @relation(fields: [createdByUserId], references: [id])
   Task      Task[]
-  userId    String
 }
 
 model Task {
-  id        String    @id @unique @default(uuid())
-  title     String
-  order     Int?      @default(9999)
-  createdBy User      @relation(fields: [userId], references: [id])
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
-  Column    Column    @relation(fields: [columnId], references: [id])
-  columnId  String
-  userId    String
+  id              String    @id @unique @default(uuid())
+  title           String
+  content         String?
+  order           Int?      @default(9999)
+  columnId        String
+  createdByUserId String
+  createdAt       DateTime? @default(now())
+  updatedAt       DateTime? @updatedAt
+  deletedAt       DateTime?
+
+  createdBy User   @relation(fields: [createdByUserId], references: [id])
+  Column    Column @relation(fields: [columnId], references: [id])
 }

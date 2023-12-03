@@ -11,20 +11,8 @@ export default class User extends Entity {
   role: string
   photo: string
   verified: boolean
-  createdAt: Date
-  updatedAt: Date
 
-  constructor({
-    id,
-    name,
-    email,
-    password,
-    role,
-    photo,
-    verified,
-    createdAt,
-    updatedAt,
-  }: UserProps) {
+  constructor({ id, name, email, password, role, photo, verified }: UserProps) {
     super({ id })
 
     this.name = name
@@ -33,7 +21,5 @@ export default class User extends Entity {
     this.role = role || 'user'
     this.photo = photo || 'default.png'
     this.verified = verified || false
-    this.createdAt = createdAt || new Date()
-    this.updatedAt = updatedAt || new Date()
   }
 }

@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
 import { generateId } from '@/shared/types/Id'
-import { mockColumns, mockTasks } from './mockDB'
+import { creativeColumns, creativeTasks } from '../../../app/api/seed/mockDB'
 
 interface BoardState {
   tasks: Task[]
@@ -15,26 +15,26 @@ interface BoardState {
 }
 
 const useBoardStore = create<BoardState>()((set) => ({
-  tasks: mockTasks,
+  tasks: creativeTasks,
   setTasks: (tasks) => set(() => ({ tasks: tasks })),
   createTask: ({ columnId }) => {
     const newTask: Task = new Task({
       id: generateId(),
       columnId,
-      title: `Task ${mockTasks.length + 1}`,
-      content: `Task ${mockTasks.length + 1}`,
+      title: `Task ${creativeTasks.length + 1}`,
+      content: `Task ${creativeTasks.length + 1}`,
     })
 
     // TODO - call graphql mutation to create task
 
     set((state) => ({ tasks: [...state.tasks, newTask] }))
   },
-  columns: mockColumns,
+  columns: creativeColumns,
   setColumns: (columns) => set(() => ({ columns: columns })),
   createColumn: () => {
     const newColumn: Column = new Column({
       id: generateId(),
-      title: `Column ${mockColumns.length + 1}`,
+      title: `Column ${creativeColumns.length + 1}`,
     })
 
     // TODO - call graphql mutation to create column
