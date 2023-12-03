@@ -1,8 +1,7 @@
 import { ControllerResponse } from '@/backend/models/Controller'
 import PrivateController from '@/backend/models/PrivateController'
 import Column from '@/shared/entities/Column'
-import { ResponseStatuses } from '@/shared/models/ResponseStatuses'
-
+import { ResponseStatuses } from '@/shared/types/ResponseStatuses'
 
 import GetColumnsUsecase from './GetColumnsUsecase'
 

@@ -3,7 +3,7 @@ import GetAuthUserService from '@/frontend/features/Auth/GetAuthUserService'
 import { NextAuthProvider } from '@/frontend/features/Auth/NextAuthProvider'
 import AppContainer from '@/frontend/features/Layout/AppContainer'
 import '@/frontend/styles/globals.css'
-import { cn } from '@/shared/utilities/utils'
+import { cn } from '@/shared/utilities/classNameMerge'
 import type { Metadata } from 'next'
 
 const inter = FontSans({ subsets: ['latin'], variable: '--font-sans' })

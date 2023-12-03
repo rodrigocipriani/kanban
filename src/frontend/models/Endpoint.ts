@@ -1,6 +1,6 @@
 import { ZodError } from 'zod'
 import zodIssuesToArray from '@/shared/utilities/zodIssuesToArray'
-import { ResponseStatuses } from '../../shared/models/ResponseStatuses'
+import { ResponseStatuses } from '../../shared/types/ResponseStatuses'
 import Api from './Api'
 import { ResponseMessage } from './ResponseMessage'
 

@@ -3,7 +3,7 @@ import PrivateController from '@/backend/models/PrivateController'
 
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
-import { ResponseStatuses } from '@/shared/models/ResponseStatuses'
+import { ResponseStatuses } from '@/shared/types/ResponseStatuses'
 
 import GetTasksUsecase from './GetTasksUsecase'
 

@@ -1,11 +1,10 @@
 import { User as PrismaUser } from '@prisma/client'
 
-import Entity from '@/shared/models/Entity'
+import Entity from '@/shared/entities/Entity'
 
-type UserProps = PrismaUser
+type UserProps = Entity & PrismaUser
 
 export default class User extends Entity {
-  id: string
   name: string
   email: string
   password: string
@@ -26,9 +25,8 @@ export default class User extends Entity {
     createdAt,
     updatedAt,
   }: UserProps) {
-    super()
+    super({ id })
 
-    this.id = id
     this.name = name
     this.email = email
     this.password = password

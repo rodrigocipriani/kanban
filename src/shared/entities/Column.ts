@@ -1,19 +1,19 @@
-import { Id } from "../types/Id";
+import Entity from './Entity'
 
-type Props = {
-  id: Id;
-  title: string;
-  order?: number;
-};
+type Props = Entity & {
+  title: string
+  order?: number
+}
 
-export default class Column {
-  readonly id: Id;
-  readonly title: string;
-  readonly order: number;
+export default class Column extends Entity {
+  readonly title: string
+
+  readonly order: number
 
   constructor({ id, title, order }: Props) {
-    this.id = id;
-    this.title = title;
-    this.order = order || 9999;
+    super({ id })
+
+    this.title = title
+    this.order = order || 9999
   }
 }

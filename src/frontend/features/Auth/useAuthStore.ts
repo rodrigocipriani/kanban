@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import AuthUser from '@/shared/models/AuthUser'
+import AuthUser from '@/shared/entities/AuthUser'
 
 interface AuthState {
   authUser: AuthUser | null

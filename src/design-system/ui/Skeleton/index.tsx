@@ -1,4 +1,4 @@
-import { cn } from '@/shared/utilities/utils'
+import { cn } from '@/shared/utilities/classNameMerge'
 
 function Skeleton({
   className,
