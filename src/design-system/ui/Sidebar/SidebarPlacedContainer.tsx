@@ -11,7 +11,7 @@ export default function SidebarPlacedContainer({ children, menu }: Props) {
       <section className="w-96 max-w-xs flex-none bg-background p-4">
         {menu}
       </section>
-      <main className="h-min min-h-0 overflow-x-auto border border-pink-400">
+      <main className="h-min min-h-0 w-full overflow-x-auto border border-pink-400">
         {children}
       </main>
     </div>

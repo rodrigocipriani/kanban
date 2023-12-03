@@ -6,26 +6,26 @@ import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
 import { Id, generateId } from '@/shared/types/Id'
 
-function createTask({
-  columnId,
-  tasks,
-  setTasks,
-}: {
-  columnId: Id
-  tasks: Task[]
-  setTasks: (tasks: Task[]) => void
-}) {
-  const newTask: Task = new Task({
-    id: generateId(),
-    columnId,
-    title: `Task ${tasks.length + 1}`,
-    content: `Task ${tasks.length + 1}`,
-  })
+// export function createTask({
+//   columnId,
+//   tasks,
+//   setTasks,
+// }: {
+//   columnId: Id
+//   tasks: Task[]
+//   setTasks: (tasks: Task[]) => void
+// }) {
+//   const newTask: Task = new Task({
+//     id: generateId(),
+//     columnId,
+//     title: `Task ${tasks.length + 1}`,
+//     content: `Task ${tasks.length + 1}`,
+//   })
 
-  setTasks([...tasks, newTask])
-}
+//   setTasks([...tasks, newTask])
+// }
 
-function deleteTask({
+export function deleteTask({
   id,
   tasks,
   setTasks,
@@ -38,7 +38,7 @@ function deleteTask({
   setTasks(newTasks)
 }
 
-function updateTask({
+export function updateTask({
   id,
   content,
   tasks,
@@ -57,22 +57,22 @@ function updateTask({
   setTasks(newTasks)
 }
 
-function createNewColumn({
-  columns,
-  setColumns,
-}: {
-  columns: Column[]
-  setColumns: (columns: Column[]) => void
-}) {
-  const columnToAdd: Column = new Column({
-    id: generateId(),
-    title: `Column ${columns.length + 1}`,
-  })
+// export function createNewColumn({
+//   columns,
+//   setColumns,
+// }: {
+//   columns: Column[]
+//   setColumns: (columns: Column[]) => void
+// }) {
+//   const columnToAdd: Column = new Column({
+//     id: generateId(),
+//     title: `Column ${columns.length + 1}`,
+//   })
 
-  setColumns([...columns, columnToAdd])
-}
+//   setColumns([...columns, columnToAdd])
+// }
 
-function deleteColumn({
+export function deleteColumn({
   id,
   columns,
   setColumns,
@@ -92,7 +92,7 @@ function deleteColumn({
   setTasks(newTasks)
 }
 
-function updateColumn({
+export function updateColumn({
   id,
   title,
   columns,
@@ -111,135 +111,124 @@ function updateColumn({
   setColumns(newColumns)
 }
 
-function onDragStart({
-  event,
-  setActiveColumn,
-  setActiveTask,
-}: {
-  event: DragStartEvent
-  setActiveColumn: (column: Column | null) => void
-  setActiveTask: (task: Task | null) => void
-}) {
-  if (event.active.data.current?.type === 'Column') {
-    setActiveColumn(event.active.data.current.column)
-    return
-  }
+// export function onDragStart({
+//   activeCurrentColumn,
+//   activeCurrentTask,
+//   setActiveColumn,
+//   setActiveTask,
+// }: {
+//   activeCurrentColumn: Column | null
+//   activeCurrentTask: Task | null
+//   setActiveColumn: (column: Column | null) => void
+//   setActiveTask: (task: Task | null) => void
+// }) {
+//   if (activeCurrentColumn) {
+//     setActiveColumn(activeCurrentColumn)
+//     return
+//   }
 
-  if (event.active.data.current?.type === 'Task') {
-    setActiveTask(event.active.data.current.task)
-    return
-  }
-}
+//   if (activeCurrentTask) {
+//     setActiveTask(activeCurrentTask)
+//     return
+//   }
+// }
 
-function onDragEnd({
-  event,
-  columns,
-  setColumns,
-  tasks,
-  setTasks,
-  setActiveColumn,
-  setActiveTask,
-}: {
-  event: DragEndEvent
-  columns: Column[]
-  setColumns: (columns: Column[]) => void
-  tasks: Task[]
-  setTasks: (tasks: Task[]) => void
-  setActiveColumn: (column: Column | null) => void
-  setActiveTask: (task: Task | null) => void
-}) {
-  setActiveColumn(null)
-  setActiveTask(null)
+// export function onDragEnd({
+//   overId,
+//   activeId,
+//   activeType,
+//   columns,
+//   setColumns,
+//   setActiveColumn,
+//   setActiveTask,
+// }: {
+//   overId: Id
+//   activeId: Id
+//   activeType: 'Column' | 'Task'
+//   columns: Column[]
+//   setColumns: (columns: Column[]) => void
+//   setActiveColumn: (column: Column | null) => void
+//   setActiveTask: (task: Task | null) => void
+// }) {
+//   setActiveColumn(null)
+//   setActiveTask(null)
 
-  const { active, over } = event
-  if (!over) return
+//   if (!overId) return
 
-  const activeId = active.id
-  const overId = over.id
+//   if (activeId === overId) return
 
-  if (activeId === overId) return
+//   const isActiveAColumn = activeType === 'Column'
 
-  const isActiveAColumn = active.data.current?.type === 'Column'
-  if (!isActiveAColumn) return
+//   if (!isActiveAColumn) return
 
-  console.log('DRAG END')
+//   console.log('DRAG END')
 
-  const activeColumnIndex = columns.findIndex((col) => col.id === activeId)
+//   const activeColumnIndex = columns.findIndex((col) => col.id === activeId)
 
-  const overColumnIndex = columns.findIndex((col) => col.id === overId)
+//   const overColumnIndex = columns.findIndex((col) => col.id === overId)
 
-  const newColumns = arrayMove(columns, activeColumnIndex, overColumnIndex)
+//   const newColumns = arrayMove(columns, activeColumnIndex, overColumnIndex)
 
-  setColumns(newColumns)
-}
+//   setColumns(newColumns)
+// }
 
-function onDragOver({
-  event,
-  tasks,
-  setTasks,
-}: {
-  event: DragOverEvent
-  tasks: Task[]
-  setTasks: (tasks: Task[]) => void
-}) {
-  const { active, over } = event
-  if (!over) return
+// export function onDragOver({
+//   overId,
+//   activeId,
+//   activeType,
+//   overType,
+//   tasks,
+//   setTasks,
+// }: {
+//   overId: Id
+//   activeId: Id
+//   activeType: 'Column' | 'Task'
+//   overType: 'Column' | 'Task'
+//   event: DragOverEvent
+//   tasks: Task[]
+//   setTasks: (tasks: Task[]) => void
+// }) {
+//   if (!overId) return
 
-  const activeId = active.id as Id
-  const overId = over.id as Id
+//   if (activeId === overId) return
 
-  if (activeId === overId) return
+//   const isActiveATask = activeType === 'Task'
+//   const isOverATask = overType === 'Task'
 
-  const isActiveATask = active.data.current?.type === 'Task'
-  const isOverATask = over.data.current?.type === 'Task'
+//   if (!isActiveATask) return
 
-  if (!isActiveATask) return
+//   if (isActiveATask && isOverATask) {
+//     const activeIndex = tasks.findIndex((t: Task) => t.id === activeId)
+//     const overIndex = tasks.findIndex((t: Task) => t.id === overId)
 
-  if (isActiveATask && isOverATask) {
-    const activeIndex = tasks.findIndex((t: Task) => t.id === activeId)
-    const overIndex = tasks.findIndex((t: Task) => t.id === overId)
+//     let newTasks = structuredClone(tasks)
 
-    let newTasks = structuredClone(tasks)
+//     if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
+//       tasks[activeIndex] = {
+//         ...tasks[activeIndex],
+//         columnId: tasks[overIndex].columnId,
+//       }
+//       newTasks = arrayMove(tasks, activeIndex, overIndex - 1)
+//     }
 
-    if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
-      tasks[activeIndex] = {
-        ...tasks[activeIndex],
-        columnId: tasks[overIndex].columnId,
-      }
-      newTasks = arrayMove(tasks, activeIndex, overIndex - 1)
-    }
+//     newTasks = arrayMove(tasks, activeIndex, overIndex)
 
-    newTasks = arrayMove(tasks, activeIndex, overIndex)
+//     setTasks(newTasks)
+//   }
 
-    setTasks(newTasks)
-  }
+//   const isOverAColumn = overType === 'Column'
+//   if (isActiveATask && isOverAColumn) {
+//     const activeIndex = tasks.findIndex((t) => t.id === activeId)
 
-  const isOverAColumn = over.data.current?.type === 'Column'
+//     tasks[activeIndex] = {
+//       ...tasks[activeIndex],
+//       columnId: overId,
+//     }
 
-  if (isActiveATask && isOverAColumn) {
-    const activeIndex = tasks.findIndex((t) => t.id === activeId)
+//     console.log('DROPPING TASK OVER COLUMN', { activeIndex })
 
-    tasks[activeIndex] = {
-      ...tasks[activeIndex],
-      columnId: overId,
-    }
+//     const newTasks = arrayMove(tasks, activeIndex, activeIndex)
 
-    console.log('DROPPING TASK OVER COLUMN', { activeIndex })
-
-    const newTasks = arrayMove(tasks, activeIndex, activeIndex)
-
-    setTasks(newTasks)
-  }
-}
-
-export {
-  createTask,
-  deleteTask,
-  updateTask,
-  createNewColumn,
-  deleteColumn,
-  updateColumn,
-  onDragStart,
-  onDragEnd,
-  onDragOver,
-}
+//     setTasks(newTasks)
+//   }
+// }

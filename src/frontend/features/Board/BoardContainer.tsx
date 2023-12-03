@@ -1,54 +1,62 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Typography from '@/design-system/ui/Typography'
 import useService from '@/frontend/helpers/useService'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
 import GetColumnsService from '../Column/GetColumnsService'
 import GetTasksService from '../Task/GetTasksService'
-import KanbanBoard from './KanbanBoard'
+import BoardColumnsContainer from './components/BoardColumnsContainer'
+import BoardWrapper from './components/BoardWrapperContainer'
+import useBoardStore from './useBoardStore'
 
 export default function BoardContainer() {
-  const [columns, setColumns] = useState<Column[]>([])
-  const [tasks, setTasks] = useState<Task[]>([])
+  const columns = useBoardStore((state) => state.columns)
+  const tasks = useBoardStore((state) => state.tasks)
+  const setColumns = useBoardStore((state) => state.setColumns)
+  const setTasks = useBoardStore((state) => state.setTasks)
 
-  const {
-    execute: executeTasks,
-    isLoading: isLoadingTasks,
-    result: resultTasks,
-  } = useService({
-    service: new GetTasksService(),
-  })
+  // const [activeColumn, setActiveColumn] = useState<Column | null>(null)
+  // const [activeTask, setActiveTask] = useState<Task | null>(null)
 
-  const {
-    execute: executeColumns,
-    isLoading: isLoadingColumns,
-    result: resultColumns,
-  } = useService({
-    service: new GetColumnsService(),
-  })
+  // const {
+  //   execute: executeTasks,
+  //   isLoading: isLoadingTasks,
+  //   result: resultTasks,
+  // } = useService({
+  //   service: new GetTasksService(),
+  // })
 
-  useEffect(() => {
-    executeTasks()
-    executeColumns()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // const {
+  //   execute: executeColumns,
+  //   isLoading: isLoadingColumns,
+  //   result: resultColumns,
+  // } = useService({
+  //   service: new GetColumnsService(),
+  // })
 
-  useEffect(() => {
-    if (!resultTasks || resultTasks?.data) return
+  // useEffect(() => {
+  //   executeTasks()
+  //   executeColumns()
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
 
-    setTasks(resultTasks.data?.tasks || [])
-  }, [resultTasks])
+  // useEffect(() => {
+  //   if (!resultTasks || resultTasks?.data) return
 
-  useEffect(() => {
-    if (!resultColumns || resultColumns?.data) return
+  //   setTasks(resultTasks.data?.tasks || [])
+  // }, [resultTasks])
 
-    setColumns(resultColumns.data?.columns || [])
-  }, [resultColumns])
+  // useEffect(() => {
+  //   if (!resultColumns || resultColumns?.data) return
 
-  if (isLoadingTasks || isLoadingColumns) {
-    return <div>Loading...</div>
-  }
+  //   setColumns(resultColumns.data?.columns || [])
+  // }, [resultColumns])
+
+  // if (isLoadingTasks || isLoadingColumns) {
+  //   return <div>Loading...</div>
+  // }
 
   const handleSetColumns = (columns: Column[]) => {
     setColumns(columns)
@@ -59,11 +67,21 @@ export default function BoardContainer() {
   }
 
   return (
-    <KanbanBoard
-      columns={columns}
-      tasks={tasks}
-      setColumns={handleSetColumns}
-      setTasks={handleSetTasks}
-    />
+    <div className="flex h-screen flex-col overflow-hidden p-4">
+      <BoardWrapper
+        columns={columns}
+        tasks={tasks}
+        // setActiveColumn={setActiveColumn}
+        // setActiveTask={setActiveTask}
+        setColumns={handleSetColumns}
+        setTasks={handleSetTasks}
+      >
+        <div className="pb-4">
+          <Typography variant="h3">Kanban Board</Typography>
+        </div>
+        {/* For now just exist one Board, in future we should pass boardId */}
+        <BoardColumnsContainer />
+      </BoardWrapper>
+    </div>
   )
 }
