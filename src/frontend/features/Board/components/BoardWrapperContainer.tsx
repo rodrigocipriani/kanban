@@ -7,13 +7,13 @@ import {
   useSensors,
 } from '@dnd-kit/core'
 
+import { arrayMove } from '@dnd-kit/sortable'
+import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
 
 import { Id } from '@/shared/types/Id'
-import { arrayMove } from '@dnd-kit/sortable'
-import { useState } from 'react'
-import { createPortal } from 'react-dom'
 import BoardColumn from './BoardColumn'
 import BoardTask from './BoardTask'
 

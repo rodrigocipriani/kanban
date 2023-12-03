@@ -1,7 +1,7 @@
-import { Button } from '@/design-system/ui/Button'
-import Icon from '@/design-system/ui/Icon'
 import { SortableContext } from '@dnd-kit/sortable'
 import { useMemo } from 'react'
+import { Button } from '@/design-system/ui/Button'
+import Icon from '@/design-system/ui/Icon'
 import useBoardStore from '../useBoardStore'
 import BoardColumn from './BoardColumn'
 

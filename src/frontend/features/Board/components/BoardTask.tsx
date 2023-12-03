@@ -1,8 +1,8 @@
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { Card, CardContent, CardHeader } from '@/design-system/ui/Card'
 import { Skeleton } from '@/design-system/ui/Skeleton'
 import Task from '@/shared/entities/Task'
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
 import useBoardStore from '../useBoardStore'
 
 export default function BoardTask({ taskId }: { taskId: Task['id'] }) {

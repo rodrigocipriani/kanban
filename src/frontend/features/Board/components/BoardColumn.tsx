@@ -1,13 +1,13 @@
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import { Button } from '@/design-system/ui/Button'
 import Icon from '@/design-system/ui/Icon'
+import { Skeleton } from '@/design-system/ui/Skeleton'
+import Typography from '@/design-system/ui/Typography'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
 import useBoardStore from '../useBoardStore'
 import BoardTask from './BoardTask'
-import { useSortable } from '@dnd-kit/sortable'
-import Typography from '@/design-system/ui/Typography'
-import { Skeleton } from '@/design-system/ui/Skeleton'
-import { CSS } from '@dnd-kit/utilities'
 
 export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
   const column = useBoardStore((state) =>
