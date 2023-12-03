@@ -22,10 +22,12 @@ export default function BoardColumnsContainer() {
           {columns.map((column) => (
             <BoardColumn key={column.id} columnId={column.id} />
           ))}
-          <Button onClick={createColumn}>
-            <Icon icon="plus" />
-            Add Column
-          </Button>
+          <div className="w-80 pt-4">
+            <Button className="w-full" onClick={createColumn}>
+              <Icon icon="plus" />
+              Add Column
+            </Button>
+          </div>
         </SortableContext>
       </div>
     </div>

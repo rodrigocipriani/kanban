@@ -36,7 +36,7 @@ export default function BoardTask({ taskId }: { taskId: Task['id'] }) {
   if (isDragging) {
     return (
       <div ref={setNodeRef} style={style}>
-        <Skeleton className="h-32 w-80" />
+        <Skeleton className="h-32" />
       </div>
     )
   }
@@ -49,7 +49,7 @@ export default function BoardTask({ taskId }: { taskId: Task['id'] }) {
       {...listeners}
       key={task.id}
     >
-      <Card className="h-32 w-80">
+      <Card className="h-32">
         <CardHeader>{task.title}</CardHeader>
         <CardContent>{task.content}</CardContent>
       </Card>

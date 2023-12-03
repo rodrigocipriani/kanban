@@ -43,12 +43,7 @@ export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
 
   if (isDragging) {
     return (
-      <div
-        ref={setNodeRef}
-        style={style}
-        // TODO - Column width should be get from some global state
-        className="flex w-80 flex-col"
-      >
+      <div ref={setNodeRef} style={style} className="flex w-80 flex-col">
         <Skeleton className="m-4 h-16" />
         <Skeleton className="m-4 h-32" />
         <Skeleton className="m-4 h-32" />
@@ -60,31 +55,27 @@ export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
   }
 
   return (
-    <div
-      style={style}
-      ref={setNodeRef}
-      className="flex flex-col rounded-md bg-slate-400 bg-opacity-50 p-4"
-    >
+    <div style={style} ref={setNodeRef} className="flex flex-col">
       <div {...attributes} {...listeners} className="p-4">
         <Typography variant="h4">{column.title}</Typography>
       </div>
-      <div className="flex flex-col gap-4 overflow-y-auto">
+      <div className="relative flex w-80 flex-col gap-4 overflow-y-auto rounded-md bg-slate-400 bg-opacity-50 p-4">
         {tasks.map((task: Task) => (
           <BoardTask key={task.id} taskId={task.id} />
         ))}
-      </div>
-      <div className="w-full pt-4">
-        <Button
-          className="w-full"
-          onClick={() => {
-            createTask({
-              columnId,
-            })
-          }}
-        >
-          <Icon icon="plus" />
-          Add task
-        </Button>
+        <div className="sticky bottom-0 w-full">
+          <Button
+            className="w-full"
+            onClick={() => {
+              createTask({
+                columnId,
+              })
+            }}
+          >
+            <Icon icon="plus" />
+            Add task
+          </Button>
+        </div>
       </div>
     </div>
   )
