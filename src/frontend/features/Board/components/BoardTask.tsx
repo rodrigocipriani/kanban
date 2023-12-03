@@ -1,9 +1,15 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Card, CardContent, CardHeader } from '@/design-system/ui/Card'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/design-system/ui/Card'
 import { Skeleton } from '@/design-system/ui/Skeleton'
 import Task from '@/shared/entities/Task'
 import useBoardStore from '../useBoardStore'
+import Typography from '@/design-system/ui/Typography'
 
 export default function BoardTask({ taskId }: { taskId: Task['id'] }) {
   const task = useBoardStore((state) =>
@@ -50,8 +56,12 @@ export default function BoardTask({ taskId }: { taskId: Task['id'] }) {
       key={task.id}
     >
       <Card className="h-32">
-        <CardHeader>{task.title}</CardHeader>
-        <CardContent>{task.content}</CardContent>
+        <CardHeader className="p-2">
+          <Typography variant="h6">{task.title}</Typography>
+        </CardHeader>
+        <CardContent className="p-2">
+          <div className="line-clamp-3">{task.content}</div>
+        </CardContent>
       </Card>
     </div>
   )
