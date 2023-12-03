@@ -16,7 +16,7 @@ export default function BoardColumnsContainer() {
   }, [columns])
 
   return (
-    <div className="flex gap-4 overflow-x-auto bg-slate-500">
+    <div className="flex gap-4 overflow-x-auto">
       <div className="flex gap-4">
         <SortableContext items={columnsId}>
           {columns.map((column) => (

@@ -7,6 +7,7 @@ import BoardTask from './BoardTask'
 import { useSortable } from '@dnd-kit/sortable'
 import Typography from '@/design-system/ui/Typography'
 import { Skeleton } from '@/design-system/ui/Skeleton'
+import { CSS } from '@dnd-kit/utilities'
 
 export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
   const column = useBoardStore((state) =>
@@ -37,7 +38,7 @@ export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
 
   const style = {
     transition,
-    transform: transform ? `translate3d(${transform.x}px, 0, 0)` : undefined,
+    transform: CSS.Transform.toString(transform),
   }
 
   if (isDragging) {
@@ -59,25 +60,32 @@ export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
   }
 
   return (
-    <div className="flex flex-col" style={style}>
-      <div {...attributes} {...listeners} ref={setNodeRef} className="p-4">
+    <div
+      style={style}
+      ref={setNodeRef}
+      className="flex flex-col rounded-md bg-slate-400 bg-opacity-50 p-4"
+    >
+      <div {...attributes} {...listeners} className="p-4">
         <Typography variant="h4">{column.title}</Typography>
       </div>
-      <div className="flex flex-col gap-4 overflow-y-auto bg-green-500">
+      <div className="flex flex-col gap-4 overflow-y-auto">
         {tasks.map((task: Task) => (
           <BoardTask key={task.id} taskId={task.id} />
         ))}
       </div>
-      <Button
-        onClick={() => {
-          createTask({
-            columnId,
-          })
-        }}
-      >
-        <Icon icon="plus" />
-        Add task
-      </Button>
+      <div className="w-full pt-4">
+        <Button
+          className="w-full"
+          onClick={() => {
+            createTask({
+              columnId,
+            })
+          }}
+        >
+          <Icon icon="plus" />
+          Add task
+        </Button>
+      </div>
     </div>
   )
 }

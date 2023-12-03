@@ -9,14 +9,20 @@
     @apply border-border;
   }
 
-  body {
-    /* @apply bg-background text-foreground; */
-    /* @apply min-h-screen bg-background font-sans antialiased; */
-    /* font-family: 'Inter', sans-serif; */
-  }
-
   a {
     @apply text-primary hover:underline;
+  }
+
+  :root {
+    body {
+      @apply bg-gradient-to-r from-blue-200 to-purple-200;
+    }
+  }
+
+  .dark {
+    body {
+      @apply bg-gradient-to-r from-blue-900 to-purple-900;
+    }
   }
 }
 
@@ -51,7 +57,6 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
-
   }
 
   .dark {
@@ -82,6 +87,5 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-
   }
 }
