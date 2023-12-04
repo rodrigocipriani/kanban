@@ -78,9 +78,12 @@ export default function BoardTask({ taskId }: { taskId: Task['id'] }) {
         {...listeners}
         key={task.id}
       >
-        <Card className="group/item relative h-32" onClick={handleStartEdit}>
-          <div className="invisible absolute right-0 top-0 group-hover/item:visible">
-            <Button size="sm" onClick={handleDelete}>
+        <Card
+          className="group/taskCard relative h-32"
+          onClick={handleStartEdit}
+        >
+          <div className="invisible absolute right-0 top-0 group-hover/taskCard:visible">
+            <Button variant="ghost" size="sm" onClick={handleDelete}>
               <Icon icon="trash" />
             </Button>
           </div>

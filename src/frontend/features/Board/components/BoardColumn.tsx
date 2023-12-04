@@ -1,11 +1,13 @@
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
 import { Button } from '@/design-system/ui/Button'
 import Icon from '@/design-system/ui/Icon'
+import { Input } from '@/design-system/ui/Input'
 import { Skeleton } from '@/design-system/ui/Skeleton'
 import Typography from '@/design-system/ui/Typography'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { useState } from 'react'
 import useBoardStore from '../useBoardStore'
 import BoardTask from './BoardTask'
 
@@ -17,6 +19,11 @@ export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
     state.tasks.filter((t) => t.columnId === columnId)
   )
   const createTask = useBoardStore((state) => state.createTask)
+  const updateColumn = useBoardStore((state) => state.updateColumn)
+  const deleteColumn = useBoardStore((state) => state.deleteColumn)
+
+  const [editMode, setEditMode] = useState(false)
+  const [newTaskTitle, setNewTaskTitle] = useState('')
 
   const {
     setNodeRef,
@@ -31,7 +38,7 @@ export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
       type: 'Column',
       column,
     },
-    // disabled: editMode,
+    disabled: editMode,
   })
 
   if (!column) return null
@@ -54,10 +61,68 @@ export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
     )
   }
 
+  const handleDelete = () => {
+    deleteColumn({ columnId })
+  }
+
+  const handleStartEdit = () => {
+    setEditMode(true)
+  }
+
+  const handleSave = () => {
+    if (!newTaskTitle) {
+      setEditMode(false)
+      setNewTaskTitle(column.title)
+    }
+
+    if (newTaskTitle !== column.title) {
+      updateColumn({
+        ...column,
+        title: newTaskTitle,
+      })
+    }
+
+    setEditMode(false)
+  }
+
   return (
-    <div style={style} ref={setNodeRef} className="flex flex-col">
-      <div {...attributes} {...listeners} className="p-4">
-        <Typography variant="h4">{column.title}</Typography>
+    <div style={style} ref={setNodeRef} className="relative flex flex-col">
+      <div
+        {...attributes}
+        {...listeners}
+        className="group/columnTitle p-4"
+        onClick={handleStartEdit}
+      >
+        {editMode ? (
+          <Input
+            className="w-full"
+            defaultValue={column.title}
+            autoFocus
+            onChange={(e) => setNewTaskTitle(e.target.value)}
+            onBlur={handleSave}
+            onKeyDown={(e) => {
+              console.log(e.key)
+              if (e.key === 'Enter' && e.shiftKey) {
+                handleSave()
+                return
+              }
+
+              if (e.key === 'Escape') {
+                setEditMode(false)
+                setNewTaskTitle(column.title)
+                return
+              }
+            }}
+          />
+        ) : (
+          <Typography variant="h4">{column.title}</Typography>
+        )}
+
+        <div className="invisible absolute right-0 top-0 group-hover/columnTitle:visible">
+          <Button size="sm" variant="ghost" onClick={handleDelete}>
+            <Icon icon="trash" />
+          </Button>
+        </div>
       </div>
       <div className="relative flex w-80 flex-col gap-4 overflow-y-auto rounded-md bg-slate-400 bg-opacity-50 p-4">
         {tasks.map((task: Task) => (

@@ -8,16 +8,16 @@ import useBoardStore from './useBoardStore'
 export default function useMessagesContainer() {
   const messages = useBoardStore((state) => state.messages)
   const removeMessage = useBoardStore((state) => state.removeMessage)
-  const { toast, toasts } = useToast()
+  const { toast } = useToast()
 
   useEffect(() => {
     if (messages.length > 0) {
       messages.forEach((message) => {
+        console.log('message', message)
         toast({
-          id: message.message,
+          title: message.type === 'error' ? 'Error' : 'Success',
           description: message.message,
           variant: message.type === 'error' ? 'destructive' : 'default',
-          duration: 5000,
         })
         removeMessage(message)
       })

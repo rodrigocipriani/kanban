@@ -1,8 +1,8 @@
+// Inspired by react-hot-toast library
 import * as React from 'react'
+import { ToastActionElement, ToastProps } from '.'
 
-import type { ToastActionElement, ToastProps } from './index'
-
-const TOAST_LIMIT = 5
+const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 1000000
 
 type ToasterToast = ToastProps & {
@@ -134,11 +134,10 @@ function dispatch(action: Action) {
   })
 }
 
-type Toast = ToasterToast
-// type Toast = Omit<ToasterToast, 'id'>
+type Toast = Omit<ToasterToast, 'id'>
 
 function toast({ ...props }: Toast) {
-  const id = props?.id || genId()
+  const id = genId()
 
   const update = (props: ToasterToast) =>
     dispatch({
