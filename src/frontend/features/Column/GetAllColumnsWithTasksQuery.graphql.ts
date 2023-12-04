@@ -1,13 +1,13 @@
 import { gql } from '@apollo/client'
 
-export const GetAllColumnsWithTasksQuery = gql`
-  query GetAllColumnsWithTasksQuery {
-    getAllColumns {
+export const GetAllColumnsAndTasksQuery = gql`
+  query GetAllColumnsAndTasksQuery {
+    columns {
       id
       title
       order
     }
-    getAllTasks {
+    tasks {
       id
       title
       content

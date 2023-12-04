@@ -2,6 +2,7 @@ import { Id } from 'react-beautiful-dnd'
 import Entity from './Entity'
 
 type Props = Entity & {
+  id?: Id
   title: string
   order?: number
   content?: string
@@ -15,7 +16,7 @@ export default class Task extends Entity {
   readonly columnId: Id
 
   constructor({ id, title, order, content, columnId }: Props) {
-    super({ id })
+    super({ id: id })
 
     this.title = title
     this.order = order || 9999

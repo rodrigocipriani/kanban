@@ -4,18 +4,20 @@ import Service, { ServiceResponse } from '@/frontend/models/Service'
 
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
-import { GetAllColumnsWithTasksQuery } from './GetAllColumnsWithTasksQuery.graphql'
+import { CreateTaskMutation } from './CreateTaskMutation.graphql'
 
-type GetAllColumnsWithTasksRequest = never
+type CreateTaskRequest = {
+  task: Task
+}
 
-type GetAllColumnsWithTasksResponse = {
+type CreateTaskResponse = {
   columns: Column[]
   tasks: Task[]
 }
 
-export default class GetAllColumnsWithTasks extends Service<
-  GetAllColumnsWithTasksRequest,
-  GetAllColumnsWithTasksResponse
+export default class CreateTaskService extends Service<
+  CreateTaskRequest,
+  CreateTaskResponse
 > {
   private readonly endpoint: GetTasksEndpoint
 
@@ -24,16 +26,19 @@ export default class GetAllColumnsWithTasks extends Service<
     this.endpoint = endpoint || new GetTasksEndpoint()
   }
 
-  async execute(): Promise<ServiceResponse<GetAllColumnsWithTasksResponse>> {
+  async execute({
+    task,
+  }: CreateTaskRequest): Promise<ServiceResponse<CreateTaskResponse>> {
     try {
-      const result = await makeApolloClient().query({
-        query: GetAllColumnsWithTasksQuery,
+      const result = await makeApolloClient().mutate({
+        mutation: CreateTaskMutation,
+        variables: task,
       })
 
       return {
         data: {
-          columns: result.data.getAllColumns || [],
-          tasks: result.data.getAllTasks || [],
+          columns: result.data.columns || [],
+          tasks: result.data.tasks || [],
         },
       }
     } catch (error) {

@@ -47,36 +47,36 @@ export const typeDefs = gql`
     getUser(id: ID!): User
     getAllUsers: [User!]
     getColumn(id: ID!): Column
-    getAllColumns: [Column!]
+    columns: [Column!]
     getTask(id: ID!): Task
-    getAllTasks: [Task!]
+    tasks: [Task!]
+  }
+
+  type Mutation {
+    # Mutations to create, update, and delete data
+    # createUser(name: String!, email: String!, password: String!): User
+    # updateUser(
+    #   id: ID!
+    #   name: String
+    #   email: String
+    #   password: String
+    #   role: String
+    #   picture: String
+    #   verified: Boolean
+    # ): User
+    # deleteUser(id: ID!): User
+
+    # createColumn(title: String!, createdByUserId: String!): Column
+    # updateColumn(id: ID!, title: String, order: Int): Column
+    # deleteColumn(id: ID!): Column
+
+    createTask(
+      title: String!
+      content: String
+      order: Int
+      columnId: String!
+    ): Task
+    # updateTask(id: ID!, title: String, content: String, order: Int): Task
+    # deleteTask(id: ID!): Task
   }
 `
-// type Mutation {
-//   # Mutations to create, update, and delete data
-//   createUser(name: String!, email: String!, password: String!): User
-//   updateUser(
-//     id: ID!
-//     name: String
-//     email: String
-//     password: String
-//     role: String
-//     picture: String
-//     verified: Boolean
-//   ): User
-//   deleteUser(id: ID!): User
-
-//   createColumn(title: String!, createdByUserId: String!): Column
-//   updateColumn(id: ID!, title: String, order: Int): Column
-//   deleteColumn(id: ID!): Column
-
-//   createTask(
-//     title: String!
-//     content: String
-//     order: Int
-//     columnId: String!
-//     createdByUserId: String!
-//   ): Task
-//   updateTask(id: ID!, title: String, content: String, order: Int): Task
-//   deleteTask(id: ID!): Task
-// }

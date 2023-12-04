@@ -3,6 +3,7 @@ import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
 import { generateId } from '@/shared/types/Id'
 import { creativeColumns, creativeTasks } from '../../../app/api/seed/mockDB'
+import CreateTaskService from '../Task/CreateTaskService'
 
 interface BoardState {
   tasks: Task[]
@@ -18,15 +19,18 @@ const useBoardStore = create<BoardState>()((set) => ({
   tasks: [],
   // tasks: creativeTasks,
   setTasks: (tasks) => set(() => ({ tasks: tasks })),
-  createTask: ({ columnId }) => {
+  createTask: async ({ columnId }) => {
     const newTask: Task = new Task({
       id: generateId(),
       columnId,
-      title: `Task ${creativeTasks.length + 1}`,
-      content: `Task ${creativeTasks.length + 1}`,
+      title: `New Task`,
+      content: ``,
     })
 
     // TODO - call graphql mutation to create task
+    const response = await new CreateTaskService().execute({ task: newTask })
+
+    console.log('response 33333333', response)
 
     set((state) => ({ tasks: [...state.tasks, newTask] }))
   },

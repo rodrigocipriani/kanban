@@ -32,9 +32,20 @@ export default class TaskRepository extends Repository<AppPrismaClient> {
     return task ? new Task(task as Task) : null
   }
 
-  async create(data: Task): Promise<Task | null> {
-    const task = await this.client.task.create({ data })
-    return new Task(task as Task)
+  async create({
+    task,
+    authUserId,
+  }: {
+    task: Task
+    authUserId: User['id']
+  }): Promise<Task | null> {
+    const newTask = await this.client.task.create({
+      data: {
+        ...task,
+        createdByUserId: authUserId,
+      },
+    })
+    return new Task(newTask as Task)
   }
 
   async update(id: string, data: Partial<Task>): Promise<Task | null> {
