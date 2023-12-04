@@ -61,7 +61,9 @@ export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
       </div>
       <div className="relative flex w-80 flex-col gap-4 overflow-y-auto rounded-md bg-slate-400 bg-opacity-50 p-4">
         {tasks.map((task: Task) => (
-          <BoardTask key={task.id} taskId={task.id} />
+          <div key={task.id}>
+            <BoardTask taskId={task.id} />
+          </div>
         ))}
         <div className="sticky bottom-0 w-full">
           <Button

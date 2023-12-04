@@ -3,18 +3,21 @@ import Task from '@/shared/entities/Task'
 import User from '@/shared/entities/User'
 import TaskRepository from './TaskRepository'
 
-export type DeleteTaskUsecaseRequest = {
-  taskId?: Task['id']
+export type UpdateTaskUsecaseRequest = {
+  id: Task['id']
+  title: Task['title']
+  content?: Task['content']
+  order?: Task['order']
   authUserId: User['id']
 }
 
-export type DeleteTaskUsecaseResponse = {
+export type UpdateTaskUsecaseResponse = {
   success: boolean
 }
 
-export default class DeleteTaskUsecase extends Usecase<
-  DeleteTaskUsecaseRequest,
-  DeleteTaskUsecaseResponse
+export default class UpdateTaskUsecase extends Usecase<
+  UpdateTaskUsecaseRequest,
+  UpdateTaskUsecaseResponse
 > {
   private readonly taskRepository: TaskRepository
 
@@ -24,22 +27,28 @@ export default class DeleteTaskUsecase extends Usecase<
   }
 
   async execute(
-    params: DeleteTaskUsecaseRequest
-  ): Promise<DeleteTaskUsecaseResponse> {
-    const { taskId, authUserId } = params
+    params: UpdateTaskUsecaseRequest
+  ): Promise<UpdateTaskUsecaseResponse> {
+    const { id, title, content, order, authUserId } = params
 
     if (!authUserId) {
       throw Error('User should be authenticated')
     }
 
-    if (!taskId) {
+    if (!id) {
       throw Error('Task ID is required')
     }
 
-    // const result = await this.taskRepository.delete({ taskId, authUserId })
-    const result = await this.taskRepository.delete({
-      taskId,
-      authUserId,
+    if (!title) {
+      throw Error('Title is required')
+    }
+
+    const result = await this.taskRepository.update({
+      id,
+      title,
+      content,
+      order,
+      authUserId: authUserId,
     })
 
     if (!result) {

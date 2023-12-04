@@ -68,6 +68,39 @@ export default class TaskRepository extends Repository<AppPrismaClient> {
     }
   }
 
+  async update({
+    id,
+    title,
+    content,
+    order,
+    authUserId,
+  }: {
+    id: Task['id']
+    title?: Task['title']
+    content?: Task['content']
+    order?: Task['order']
+    authUserId: User['id']
+  }): Promise<{
+    success: boolean
+  }> {
+    if (!authUserId) {
+      throw Error('AuthUserId is required')
+    }
+
+    const updatedTask = await this.client.task.update({
+      where: { id, createdByUserId: authUserId },
+      data: {
+        title,
+        content,
+        order,
+      },
+    })
+
+    return {
+      success: !!updatedTask,
+    }
+  }
+
   // async update(id: string, data: Partial<Task>): Promise<Task | null> {
   //   if (!authUserId) {
   //     throw Error('AuthUserId is required')

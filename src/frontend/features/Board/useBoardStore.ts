@@ -5,6 +5,7 @@ import { create } from 'zustand'
 import { creativeColumns } from '../../../app/api/seed/mockDB'
 import CreateTaskService from '../Task/CreateTaskService'
 import DeleteTaskService from '../Task/DeleteTaskService'
+import UpdateTaskService from '../Task/UpdateTaskService'
 
 interface BoardState {
   // messages: ResponseMessage[]
@@ -13,6 +14,17 @@ interface BoardState {
   setTasks: (tasks: Task[]) => void
   createTask: (columnId: { columnId: string }) => void
   deleteTask: (taskId: { taskId: string }) => void
+  updateTask: ({
+    id,
+    title,
+    content,
+    order,
+  }: {
+    id: Task['id']
+    title?: Task['title']
+    content?: Task['content']
+    order?: Task['order']
+  }) => void
 
   columns: Column[]
   setColumns: (columns: Column[]) => void
@@ -51,7 +63,6 @@ const useBoardStore = create<BoardState>()((set) => ({
     })
 
     const response = await new DeleteTaskService().execute({ taskId })
-    console.log('333 response', response)
     // if (!response.data?.success) {
     //   set((state) => ({
     //     tasks: {
@@ -60,6 +71,31 @@ const useBoardStore = create<BoardState>()((set) => ({
     //     },
     //   }))
     // }
+  },
+  updateTask: async (task) => {
+    set((state) => ({
+      tasks: state.tasks.map((t) => {
+        if (t.id === task.id) {
+          return {
+            ...t,
+            ...task,
+          }
+        }
+
+        return t
+      }),
+    }))
+
+    const response = await new UpdateTaskService().execute({
+      id: task.id,
+      title: task.title,
+      content: task.content,
+      order: task.order,
+    })
+
+    if (!response.data?.success) {
+      // TODO - revert state
+    }
   },
 
   columns: [],

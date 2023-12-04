@@ -66,6 +66,7 @@ export const typeDefs = gql`
       columnId: String!
     ): Success
     deleteTask(taskId: ID!): Success
+    updateTask(id: ID!, title: String, content: String, order: Int): Success
 
     # createUser(name: String!, email: String!, password: String!): User
     # updateUser(
@@ -82,7 +83,5 @@ export const typeDefs = gql`
     # createColumn(title: String!, createdByUserId: String!): Column
     # updateColumn(id: ID!, title: String, order: Int): Column
     # deleteColumn(id: ID!): Column
-
-    # updateTask(id: ID!, title: String, content: String, order: Int): Task
   }
 `

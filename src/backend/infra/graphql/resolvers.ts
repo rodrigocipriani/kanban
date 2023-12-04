@@ -1,8 +1,10 @@
 import ColumnRepository from '@/backend/features/Column/ColumnRepository'
 import GetColumnsUsecase from '@/backend/features/Column/GetColumnsUsecase'
 import CreateTaskUsecase from '@/backend/features/Task/CreateTaskUsecase'
+import DeleteTaskUsecase from '@/backend/features/Task/DeleteTaskUsecase'
 import GetTasksUsecase from '@/backend/features/Task/GetTasksUsecase'
 import TaskRepository from '@/backend/features/Task/TaskRepository'
+import UpdateTaskUsecase from '@/backend/features/Task/UpdateTaskUsecase'
 import UserRepository from '@/backend/features/User/UserRepository'
 import AuthUser from '@/shared/entities/AuthUser'
 import Column from '@/shared/entities/Column'
@@ -101,8 +103,35 @@ export const resolvers = {
         throw new Error('Authentication required')
       }
 
-      return taskRepository.delete({ taskId, authUserId: context.authUser.id })
+      return new DeleteTaskUsecase().execute({
+        taskId,
+        authUserId: context.authUser.id,
+      })
+      // return taskRepository.delete({ taskId, authUserId: context.authUser.id })
     },
+    updateTask: async (
+      _: never,
+      {
+        id,
+        title,
+        content,
+        order,
+      }: { id: string; title: string; content?: string; order?: number },
+      context: { authUser?: AuthUser }
+    ) => {
+      if (!context.authUser) {
+        throw new Error('Authentication required')
+      }
+
+      return new UpdateTaskUsecase().execute({
+        id,
+        title,
+        content,
+        order,
+        authUserId: context.authUser.id,
+      })
+    },
+
     // createUser: async (
     //   _: never,
     //   {
