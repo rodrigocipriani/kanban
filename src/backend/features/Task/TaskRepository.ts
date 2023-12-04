@@ -18,19 +18,30 @@ export default class TaskRepository extends Repository<AppPrismaClient> {
     columnId: Column['id']
     authUserId: User['id']
   }): Promise<Task[]> {
+    if (!authUserId) {
+      throw Error('AuthUserId is required')
+    }
+
     const tasks = await this.client.task.findMany({
-      where: { createdByUserId: authUserId, columnId },
+      where: {
+        createdByUserId: authUserId,
+        columnId: columnId || undefined,
+        deletedAt: null,
+      },
     })
 
     return tasks.map((task) => new Task(task as Task))
   }
 
-  async findById({ id }: { id: string }): Promise<Task | null> {
-    const task = await this.client.task.findUnique({
-      where: { id },
-    })
-    return task ? new Task(task as Task) : null
-  }
+  // async findById({ id }: { id: string }): Promise<Task | null> {
+  //   if (!authUserId) {
+  //     throw Error('AuthUserId is required')
+  //   }
+  //   const task = await this.client.task.findUnique({
+  //     where: { id, createdByUserId: authUserId, deletedAt: null },
+  //   })
+  //   return task ? new Task(task as Task) : null
+  // }
 
   async create({
     task,
@@ -38,28 +49,60 @@ export default class TaskRepository extends Repository<AppPrismaClient> {
   }: {
     task: Task
     authUserId: User['id']
-  }): Promise<Task | null> {
+  }): Promise<{
+    success: boolean
+  }> {
+    if (!authUserId) {
+      throw Error('AuthUserId is required')
+    }
+
     const newTask = await this.client.task.create({
       data: {
         ...task,
         createdByUserId: authUserId,
       },
     })
-    return new Task(newTask as Task)
+
+    console.log('newTask', newTask)
+
+    return {
+      success: !!task,
+    }
   }
 
-  async update(id: string, data: Partial<Task>): Promise<Task | null> {
+  // async update(id: string, data: Partial<Task>): Promise<Task | null> {
+  //   if (!authUserId) {
+  //     throw Error('AuthUserId is required')
+  //   }
+  //   const task = await this.client.task.update({
+  //     where: { id, deletedAt: null },
+  //     data,
+  //   })
+  //   return new Task(task as Task)
+  // }
+
+  async delete({
+    taskId,
+    authUserId,
+  }: {
+    taskId: Task['id']
+    authUserId: User['id']
+  }): Promise<{
+    success: boolean
+  }> {
+    if (!authUserId) {
+      throw Error('AuthUserId is required')
+    }
+
     const task = await this.client.task.update({
-      where: { id },
-      data,
+      where: { id: taskId, createdByUserId: authUserId },
+      data: {
+        deletedAt: new Date(),
+      },
     })
-    return new Task(task as Task)
-  }
 
-  async delete(id: string): Promise<Task | null> {
-    const task = await this.client.task.delete({
-      where: { id },
-    })
-    return new Task(task as Task)
+    return {
+      success: !!task,
+    }
   }
 }

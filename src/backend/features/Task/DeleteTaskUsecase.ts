@@ -1,19 +1,18 @@
 import Usecase from '@/backend/models/Usecase'
-import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
 import User from '@/shared/entities/User'
 import TaskRepository from './TaskRepository'
 
 export type GetTasksUsecaseRequest = {
-  columnId?: Column['id']
+  taskId?: Task['id']
   authUserId: User['id']
 }
 
 export type GetTasksUsecaseResponse = {
-  tasks: Task[]
+  success: boolean
 }
 
-export default class GetTasksUsecase extends Usecase<
+export default class DeleteTaskUsecase extends Usecase<
   GetTasksUsecaseRequest,
   GetTasksUsecaseResponse
 > {
@@ -27,20 +26,22 @@ export default class GetTasksUsecase extends Usecase<
   async execute(
     params: GetTasksUsecaseRequest
   ): Promise<GetTasksUsecaseResponse> {
-    const { columnId, authUserId } = params
+    const { taskId, authUserId } = params
 
     if (!authUserId) {
       throw Error('User should be authenticated')
     }
 
-    const tasks = await this.taskRepository.findAll({ columnId, authUserId })
+    if (!taskId) {
+      throw Error('Task ID is required')
+    }
 
-    if (!tasks) {
+    const result = await this.taskRepository.delete({ taskId, authUserId })
+
+    if (!result) {
       throw Error('Something went wrong.')
     }
 
-    return {
-      tasks,
-    }
+    return result
   }
 }

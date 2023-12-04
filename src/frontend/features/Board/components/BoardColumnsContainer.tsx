@@ -1,3 +1,4 @@
+import { UniqueIdentifier } from '@dnd-kit/core'
 import { SortableContext } from '@dnd-kit/sortable'
 import { useMemo } from 'react'
 import { Button } from '@/design-system/ui/Button'
@@ -9,10 +10,14 @@ export default function BoardColumnsContainer() {
   const columns = useBoardStore((state) => state.columns)
   const createColumn = useBoardStore((state) => state.createColumn)
 
-  const columnsId = useMemo(() => {
+  const columnsId: { id: UniqueIdentifier }[] = useMemo(() => {
     if (!columns) return []
 
-    return columns.map((col) => col.id)
+    const a: { id: UniqueIdentifier }[] = columns
+      .filter((col) => !!col.id)
+      .map((col) => ({ id: col.id as UniqueIdentifier }))
+
+    return a
   }, [columns])
 
   return (

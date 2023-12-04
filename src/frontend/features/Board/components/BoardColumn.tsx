@@ -1,11 +1,11 @@
-import { useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
 import { Button } from '@/design-system/ui/Button'
 import Icon from '@/design-system/ui/Icon'
 import { Skeleton } from '@/design-system/ui/Skeleton'
 import Typography from '@/design-system/ui/Typography'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import useBoardStore from '../useBoardStore'
 import BoardTask from './BoardTask'
 
@@ -67,9 +67,10 @@ export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
           <Button
             className="w-full"
             onClick={() => {
-              createTask({
-                columnId,
-              })
+              columnId &&
+                createTask({
+                  columnId,
+                })
             }}
           >
             <Icon icon="plus" />

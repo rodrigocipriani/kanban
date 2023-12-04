@@ -1,14 +1,15 @@
-import { create } from 'zustand'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
 import { generateId } from '@/shared/types/Id'
-import { creativeColumns, creativeTasks } from '../../../app/api/seed/mockDB'
+import { create } from 'zustand'
+import { creativeColumns } from '../../../app/api/seed/mockDB'
 import CreateTaskService from '../Task/CreateTaskService'
 
 interface BoardState {
   tasks: Task[]
   setTasks: (tasks: Task[]) => void
   createTask: (columnId: { columnId: string }) => void
+  deleteTask: (taskId: { taskId: string }) => void
 
   columns: Column[]
   setColumns: (columns: Column[]) => void
@@ -17,7 +18,6 @@ interface BoardState {
 
 const useBoardStore = create<BoardState>()((set) => ({
   tasks: [],
-  // tasks: creativeTasks,
   setTasks: (tasks) => set(() => ({ tasks: tasks })),
   createTask: async ({ columnId }) => {
     const newTask: Task = new Task({
@@ -27,15 +27,24 @@ const useBoardStore = create<BoardState>()((set) => ({
       content: ``,
     })
 
-    // TODO - call graphql mutation to create task
-    const response = await new CreateTaskService().execute({ task: newTask })
-
-    console.log('response 33333333', response)
-
     set((state) => ({ tasks: [...state.tasks, newTask] }))
+
+    const response = await new CreateTaskService().execute({ task: newTask })
+    if (!response.data?.success) {
+      set((state) => ({
+        tasks: state.tasks.filter((task) => task.id !== newTask.id),
+      }))
+    }
   },
+  deleteTask: ({ taskId }) => {
+    // TODO - call graphql mutation to delete task
+
+    set((state) => ({
+      tasks: state.tasks.filter((task) => task.id !== taskId),
+    }))
+  },
+
   columns: [],
-  // columns: creativeColumns,
   setColumns: (columns) => set(() => ({ columns: columns })),
   createColumn: () => {
     const newColumn: Column = new Column({

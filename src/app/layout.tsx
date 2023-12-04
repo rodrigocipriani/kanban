@@ -1,3 +1,4 @@
+import { Inter as FontSans } from 'next/font/google'
 import GetAuthUserService from '@/frontend/features/Auth/GetAuthUserService'
 import { NextAuthProvider } from '@/frontend/features/Auth/NextAuthProvider'
 import AppContainer from '@/frontend/features/Layout/AppContainer'
@@ -5,7 +6,6 @@ import '@/frontend/styles/globals.css'
 import { ApolloWrapper } from '@/frontend/infra/Apollo/ApolloWrapper'
 import { cn } from '@/shared/utilities/classNameMerge'
 import type { Metadata } from 'next'
-import { Inter as FontSans } from 'next/font/google'
 
 const inter = FontSans({ subsets: ['latin'], variable: '--font-sans' })
 

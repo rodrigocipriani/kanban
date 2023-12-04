@@ -1,21 +1,20 @@
 import Usecase from '@/backend/models/Usecase'
-import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
 import User from '@/shared/entities/User'
 import TaskRepository from './TaskRepository'
 
-export type GetTasksUsecaseRequest = {
-  columnId?: Column['id']
+export type CreateTaskUsecaseRequest = {
+  task: Task
   authUserId: User['id']
 }
 
-export type GetTasksUsecaseResponse = {
-  tasks: Task[]
+export type CreateTaskUsecaseResponse = {
+  success: boolean
 }
 
-export default class GetTasksUsecase extends Usecase<
-  GetTasksUsecaseRequest,
-  GetTasksUsecaseResponse
+export default class CreateTaskUsecase extends Usecase<
+  CreateTaskUsecaseRequest,
+  CreateTaskUsecaseResponse
 > {
   private readonly taskRepository: TaskRepository
 
@@ -25,22 +24,27 @@ export default class GetTasksUsecase extends Usecase<
   }
 
   async execute(
-    params: GetTasksUsecaseRequest
-  ): Promise<GetTasksUsecaseResponse> {
-    const { columnId, authUserId } = params
+    params: CreateTaskUsecaseRequest
+  ): Promise<CreateTaskUsecaseResponse> {
+    const { task, authUserId } = params
 
     if (!authUserId) {
       throw Error('User should be authenticated')
     }
 
-    const tasks = await this.taskRepository.findAll({ columnId, authUserId })
+    if (!task) {
+      throw Error('Task is required')
+    }
 
-    if (!tasks) {
+    const result = await this.taskRepository.create({
+      task: new Task(task),
+      authUserId: authUserId,
+    })
+
+    if (!result) {
       throw Error('Something went wrong.')
     }
 
-    return {
-      tasks,
-    }
+    return result
   }
 }

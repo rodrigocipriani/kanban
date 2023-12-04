@@ -1,7 +1,7 @@
 import User from '@/shared/entities/User'
-import Entity from './Entity'
+import Entity, { EntityProps } from './Entity'
 
-type UserProps = {
+type UserProps = EntityProps & {
   id: User['id']
   name: User['name']
   email: User['email']

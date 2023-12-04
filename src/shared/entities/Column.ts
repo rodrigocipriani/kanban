@@ -1,6 +1,6 @@
-import Entity from './Entity'
+import Entity, { EntityProps } from './Entity'
 
-type Props = Entity & {
+type Props = EntityProps & {
   title: string
   order?: number
 }

@@ -1,6 +1,10 @@
 import gql from 'graphql-tag'
 
 export const typeDefs = gql`
+  type Success {
+    success: Boolean
+  }
+
   type User {
     id: ID!
     name: String!
@@ -44,16 +48,24 @@ export const typeDefs = gql`
 
   type Query {
     # Queries to retrieve data
+    columns: [Column!]
+    tasks: [Task!]
+
     getUser(id: ID!): User
     getAllUsers: [User!]
     getColumn(id: ID!): Column
-    columns: [Column!]
     getTask(id: ID!): Task
-    tasks: [Task!]
   }
 
   type Mutation {
-    # Mutations to create, update, and delete data
+    createTask(
+      title: String!
+      content: String
+      order: Int
+      columnId: String!
+    ): Success
+    deleteTask(id: ID!): Task
+
     # createUser(name: String!, email: String!, password: String!): User
     # updateUser(
     #   id: ID!
@@ -70,13 +82,6 @@ export const typeDefs = gql`
     # updateColumn(id: ID!, title: String, order: Int): Column
     # deleteColumn(id: ID!): Column
 
-    createTask(
-      title: String!
-      content: String
-      order: Int
-      columnId: String!
-    ): Task
     # updateTask(id: ID!, title: String, content: String, order: Int): Task
-    # deleteTask(id: ID!): Task
   }
 `

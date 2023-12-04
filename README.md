@@ -20,3 +20,7 @@ First, run the development server:
 ```bash
 bun run dev
 ```
+
+# TODOs
+
+- [ ] Capture Services messages and show in Toasts

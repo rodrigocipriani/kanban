@@ -1,8 +1,8 @@
 import { User as PrismaUser } from '@prisma/client'
 
-import Entity from '@/shared/entities/Entity'
+import Entity, { EntityProps } from '@/shared/entities/Entity'
 
-type UserProps = Entity & PrismaUser
+type UserProps = EntityProps & PrismaUser
 
 export default class User extends Entity {
   name: string

@@ -1,3 +1,4 @@
+import { ApolloError } from '@apollo/client'
 import { ResponseMessage } from './ResponseMessage'
 
 export class ServiceResponse<TResponse> {
@@ -22,7 +23,13 @@ export default abstract class Service<TRequest, TResponse> {
   ): ServiceResponse<TResponse> | Promise<ServiceResponse<TResponse>>
 
   public handleError(error: Error | unknown): ServiceResponse<TResponse> {
+    console.error('Service error', error)
+
     if (error instanceof Error) {
+      return new ServiceResponse({
+        messages: [{ type: 'error', message: error.message }],
+      })
+    } else if (error instanceof ApolloError) {
       return new ServiceResponse({
         messages: [{ type: 'error', message: error.message }],
       })
