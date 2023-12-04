@@ -78,17 +78,7 @@ export const resolvers = {
   Mutation: {
     createTask: async (
       _: never,
-      {
-        title,
-        content,
-        order,
-        columnId,
-      }: {
-        title: string
-        content?: string
-        order?: number
-        columnId: string
-      },
+      task: Task,
       context: { authUser?: AuthUser }
     ): Promise<{ success: boolean }> => {
       if (!context.authUser) {
@@ -96,12 +86,7 @@ export const resolvers = {
       }
 
       const result = new CreateTaskUsecase().execute({
-        task: new Task({
-          title,
-          content,
-          order,
-          columnId,
-        }),
+        task,
         authUserId: context.authUser.id,
       })
 

@@ -4,8 +4,11 @@ import { generateId } from '@/shared/types/Id'
 import { create } from 'zustand'
 import { creativeColumns } from '../../../app/api/seed/mockDB'
 import CreateTaskService from '../Task/CreateTaskService'
+import DeleteTaskService from '../Task/DeleteTaskService'
 
 interface BoardState {
+  // messages: ResponseMessage[]
+
   tasks: Task[]
   setTasks: (tasks: Task[]) => void
   createTask: (columnId: { columnId: string }) => void
@@ -17,11 +20,11 @@ interface BoardState {
 }
 
 const useBoardStore = create<BoardState>()((set) => ({
+  messages: [],
   tasks: [],
   setTasks: (tasks) => set(() => ({ tasks: tasks })),
   createTask: async ({ columnId }) => {
     const newTask: Task = new Task({
-      id: generateId(),
       columnId,
       title: `New Task`,
       content: ``,
@@ -36,12 +39,27 @@ const useBoardStore = create<BoardState>()((set) => ({
       }))
     }
   },
-  deleteTask: ({ taskId }) => {
-    // TODO - call graphql mutation to delete task
+  deleteTask: async ({ taskId }) => {
+    let taskToBeDeleted: Task | undefined
 
-    set((state) => ({
-      tasks: state.tasks.filter((task) => task.id !== taskId),
-    }))
+    set((state) => {
+      taskToBeDeleted = state.tasks.find((task) => task.id === taskId)
+
+      return {
+        tasks: state.tasks.filter((task) => task.id !== taskId),
+      }
+    })
+
+    const response = await new DeleteTaskService().execute({ taskId })
+    console.log('333 response', response)
+    // if (!response.data?.success) {
+    //   set((state) => ({
+    //     tasks: {
+    //       ...state.tasks,
+    //       taskToBeDeleted,
+    //     },
+    //   }))
+    // }
   },
 
   columns: [],

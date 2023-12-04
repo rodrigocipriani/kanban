@@ -49,12 +49,14 @@ export default class CreateTaskService extends Service<
 
 const CreateTaskMutation = gql`
   mutation CreateTaskMutation(
+    $id: ID!
     $title: String!
     $columnId: String!
     $content: String
     $order: Int
   ) {
     createTask(
+      id: $id
       title: $title
       columnId: $columnId
       content: $content

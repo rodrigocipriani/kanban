@@ -59,12 +59,13 @@ export const typeDefs = gql`
 
   type Mutation {
     createTask(
+      id: ID!
       title: String!
       content: String
       order: Int
       columnId: String!
     ): Success
-    deleteTask(id: ID!): Task
+    deleteTask(taskId: ID!): Success
 
     # createUser(name: String!, email: String!, password: String!): User
     # updateUser(

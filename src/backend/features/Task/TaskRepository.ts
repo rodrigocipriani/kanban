@@ -63,8 +63,6 @@ export default class TaskRepository extends Repository<AppPrismaClient> {
       },
     })
 
-    console.log('newTask', newTask)
-
     return {
       success: !!task,
     }
@@ -93,6 +91,9 @@ export default class TaskRepository extends Repository<AppPrismaClient> {
     if (!authUserId) {
       throw Error('AuthUserId is required')
     }
+
+    console.log('taskId', taskId)
+    console.log('authUserId', authUserId)
 
     const task = await this.client.task.update({
       where: { id: taskId, createdByUserId: authUserId },
