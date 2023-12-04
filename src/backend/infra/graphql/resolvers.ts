@@ -1,18 +1,14 @@
-import ColumnRepository from '@/backend/features/Column/ColumnRepository'
+import CreateColumnUsecase from '@/backend/features/Column/CreateColumnUsecase'
+import DeleteColumnUsecase from '@/backend/features/Column/DeleteColumnUsecase'
 import GetColumnsUsecase from '@/backend/features/Column/GetColumnsUsecase'
+import UpdateColumnUsecase from '@/backend/features/Column/UpdateColumnUsecase'
 import CreateTaskUsecase from '@/backend/features/Task/CreateTaskUsecase'
 import DeleteTaskUsecase from '@/backend/features/Task/DeleteTaskUsecase'
 import GetTasksUsecase from '@/backend/features/Task/GetTasksUsecase'
-import TaskRepository from '@/backend/features/Task/TaskRepository'
 import UpdateTaskUsecase from '@/backend/features/Task/UpdateTaskUsecase'
-import UserRepository from '@/backend/features/User/UserRepository'
 import AuthUser from '@/shared/entities/AuthUser'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
-
-const columnRepository = new ColumnRepository()
-const taskRepository = new TaskRepository()
-const userRepository = new UserRepository()
 
 export const resolvers = {
   Query: {
@@ -47,35 +43,6 @@ export const resolvers = {
 
       return usecase.tasks
     },
-
-    // getAllUsers: async (
-    //   _parent: never,
-    //   _args: never,
-    //   context: { authUser?: AuthUser }
-    // ) => {
-    //   return userRepository.findAll()
-    // },
-    // getUser: async (
-    //   _parent: never,
-    //   { id }: { id: string },
-    //   context: { authUser?: AuthUser }
-    // ) => {
-    //   return userRepository.findById({ id })
-    // },
-    // getColumn: async (
-    //   _parent: never,
-    //   { id }: { id: string },
-    //   context: { authUser?: AuthUser }
-    // ) => {
-    //   return columnRepository.findById(id)
-    // },
-    // getTask: async (
-    //   _parent: never,
-    //   { id }: { id: string },
-    //   context: { authUser?: AuthUser }
-    // ) => {
-    //   return taskRepository.findById({ id })
-    // },
   },
   Mutation: {
     createTask: async (
@@ -107,7 +74,6 @@ export const resolvers = {
         taskId,
         authUserId: context.authUser.id,
       })
-      // return taskRepository.delete({ taskId, authUserId: context.authUser.id })
     },
     updateTask: async (
       _: never,
@@ -132,75 +98,51 @@ export const resolvers = {
       })
     },
 
-    // createUser: async (
-    //   _: never,
-    //   {
-    //     name,
-    //     email,
-    //     password,
-    //   }: { name: string; email: string; password: string }
-    // ) => {
-    //   return userRepository.create({ name, email, password })
-    // },
-    // updateUser: async (
-    //   _: never,
-    //   {
-    //     id,
-    //     name,
-    //     email,
-    //     password,
-    //     role,
-    //     photo,
-    //     verified,
-    //   }: {
-    //     id: string
-    //     name: string
-    //     email: string
-    //     password: string
-    //     role?: string
-    //     photo?: string
-    //     verified?: boolean
-    //   }
-    // ) => {
-    //   return userRepository.update({
-    //     id,
-    //     name,
-    //     email,
-    //     password,
-    //     role,
-    //     photo,
-    //     verified,
-    //   })
-    // },
-    // deleteUser: async (_: never, { id }: { id: string }) => {
-    //   return userRepository.delete(id)
-    // },
-    // createColumn: async (
-    //   _: never,
-    //   { title, createdByUserId }: { title: string; createdByUserId: string }
-    // ) => {
-    //   return columnRepository.create({ title, createdByUserId })
-    // },
-    // updateColumn: async (
-    //   _: never,
-    //   { id, title, order }: { id: string; title: string; order?: number }
-    // ) => {
-    //   return columnRepository.update({ id, title, order })
-    // },
-    // deleteColumn: async (_: never, { id }: { id: string }) => {
-    //   return columnRepository.delete(id)
-    // },
-    // updateTask: async (
-    //   _: never,
-    //   {
-    //     id,
-    //     title,
-    //     content,
-    //     order,
-    //   }: { id: string; title: string; content?: string; order?: number }
-    // ) => {
-    //   return taskRepository.update({ id, title, content, order })
-    // },
+    createColumn: async (
+      _: never,
+      column: Column,
+      context: { authUser?: AuthUser }
+    ): Promise<{ success: boolean }> => {
+      if (!context.authUser) {
+        throw new Error('Authentication required')
+      }
+
+      const result = new CreateColumnUsecase().execute({
+        column,
+        authUserId: context.authUser.id,
+      })
+
+      return result
+    },
+    deleteColumn: async (
+      _: never,
+      { columnId }: { columnId: Column['id'] },
+      context: { authUser?: AuthUser }
+    ) => {
+      if (!context.authUser) {
+        throw new Error('Authentication required')
+      }
+
+      return new DeleteColumnUsecase().execute({
+        columnId,
+        authUserId: context.authUser.id,
+      })
+    },
+    updateColumn: async (
+      _: never,
+      { id, title, order }: { id: string; title: string; order?: number },
+      context: { authUser?: AuthUser }
+    ) => {
+      if (!context.authUser) {
+        throw new Error('Authentication required')
+      }
+
+      return new UpdateColumnUsecase().execute({
+        id,
+        title,
+        order,
+        authUserId: context.authUser.id,
+      })
+    },
   },
-  // Additional resolvers for nested fields or relationships can be added here
 }

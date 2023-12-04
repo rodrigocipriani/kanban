@@ -1,10 +1,10 @@
 'use client'
 
+import { useEffect } from 'react'
 import Typography from '@/design-system/ui/Typography'
 import useService from '@/frontend/helpers/useService'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
-import { useEffect } from 'react'
 import GetAllColumnsWithTasksService from '../Column/GetAllColumnsWithTasksService'
 import BoardColumnsContainer from './components/BoardColumnsContainer'
 import BoardWrapper from './components/BoardWrapperContainer'

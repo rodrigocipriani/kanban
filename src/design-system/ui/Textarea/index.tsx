@@ -1,5 +1,5 @@
-import { cn } from '@/shared/utilities/classNameMerge'
 import * as React from 'react'
+import { cn } from '@/shared/utilities/classNameMerge'
 
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}

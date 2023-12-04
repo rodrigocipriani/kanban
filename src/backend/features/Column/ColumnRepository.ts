@@ -2,7 +2,6 @@ import appPrismaClient, {
   AppPrismaClient,
 } from '@/backend/infra/appPrismaClient'
 import Repository from '@/backend/models/Repository'
-
 import Column from '@/shared/entities/Column'
 import User from '@/shared/entities/User'
 
@@ -12,39 +11,97 @@ export default class ColumnRepository extends Repository<AppPrismaClient> {
   }
 
   async findAll({ authUserId }: { authUserId: User['id'] }): Promise<Column[]> {
-    if (!authUserId) throw new Error('User not found')
+    if (!authUserId) {
+      throw Error('AuthUserId is required')
+    }
 
     const columns = await this.client.column.findMany({
-      where: { createdByUserId: authUserId },
+      where: {
+        createdByUserId: authUserId,
+        deletedAt: null,
+      },
     })
 
     return columns.map((column) => new Column(column as Column))
   }
 
-  async findById(id: string): Promise<Column | null> {
-    const column = await this.client.column.findUnique({
-      where: { id },
+  async create({
+    column,
+    authUserId,
+  }: {
+    column: Column
+    authUserId: User['id']
+  }): Promise<{
+    success: boolean
+  }> {
+    if (!authUserId) {
+      throw Error('AuthUserId is required')
+    }
+
+    const newColumn = await this.client.column.create({
+      data: {
+        ...column,
+        createdByUserId: authUserId,
+      },
     })
-    return column ? new Column(column as Column) : null
+
+    return {
+      success: !!column,
+    }
   }
 
-  async create(data: Column): Promise<Column | null> {
-    const column = await this.client.column.create({ data })
-    return new Column(column as Column)
+  async update({
+    id,
+    title,
+    order,
+    authUserId,
+  }: {
+    id: Column['id']
+    title?: Column['title']
+    order?: Column['order']
+    authUserId: User['id']
+  }): Promise<{
+    success: boolean
+  }> {
+    if (!authUserId) {
+      throw Error('AuthUserId is required')
+    }
+
+    const updatedColumn = await this.client.column.update({
+      where: { id, createdByUserId: authUserId },
+      data: {
+        title,
+        order,
+      },
+    })
+
+    return {
+      success: !!updatedColumn,
+    }
   }
 
-  async update(id: string, data: Partial<Column>): Promise<Column | null> {
+  async delete({
+    columnId,
+    authUserId,
+  }: {
+    columnId: Column['id']
+    authUserId: User['id']
+  }): Promise<{
+    success: boolean
+  }> {
+    if (!authUserId) {
+      throw Error('AuthUserId is required')
+    }
+
     const column = await this.client.column.update({
-      where: { id },
-      data,
+      where: { id: columnId, createdByUserId: authUserId },
+      data: {
+        deletedAt: new Date(),
+      },
     })
-    return new Column(column as Column)
-  }
 
-  async delete(id: string): Promise<Column | null> {
-    const column = await this.client.column.delete({
-      where: { id },
-    })
-    return new Column(column as Column)
+    return {
+      success: !!column,
+    }
   }
 }

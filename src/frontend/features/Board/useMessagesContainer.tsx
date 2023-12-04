@@ -1,7 +1,7 @@
 'use client'
 
-import { useToast } from '@/design-system/ui/Toast/use-toast'
 import { useEffect } from 'react'
+import { useToast } from '@/design-system/ui/Toast/use-toast'
 import useBoardStore from './useBoardStore'
 
 // TODO - Should be moved to a global store
@@ -22,6 +22,7 @@ export default function useMessagesContainer() {
         removeMessage(message)
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages])
 
   return messages

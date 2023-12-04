@@ -47,17 +47,20 @@ export const typeDefs = gql`
   }
 
   type Query {
-    # Queries to retrieve data
     columns: [Column!]
     tasks: [Task!]
 
-    getUser(id: ID!): User
-    getAllUsers: [User!]
-    getColumn(id: ID!): Column
-    getTask(id: ID!): Task
+    # getUser(id: ID!): User
+    # getAllUsers: [User!]
+    # getColumn(id: ID!): Column
+    # getTask(id: ID!): Task
   }
 
   type Mutation {
+    createColumn(id: ID!, title: String!, order: Int): Success
+    deleteColumn(columnId: ID!): Success
+    updateColumn(id: ID!, title: String, order: Int): Success
+
     createTask(
       id: ID!
       title: String!

@@ -1,6 +1,6 @@
+import { gql } from '@apollo/client'
 import { apolloClient } from '@/frontend/infra/Apollo/ApolloWrapper'
 import Service, { ServiceResponse } from '@/frontend/models/Service'
-import { gql } from '@apollo/client'
 
 import Task from '@/shared/entities/Task'
 

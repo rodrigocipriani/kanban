@@ -1,12 +1,15 @@
+import { create } from 'zustand'
+import { ResponseMessage } from '@/frontend/models/ResponseMessage'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
 import { generateId } from '@/shared/types/Id'
-import { create } from 'zustand'
 import { creativeColumns } from '../../../app/api/seed/mockDB'
 import CreateTaskService from '../Task/CreateTaskService'
 import DeleteTaskService from '../Task/DeleteTaskService'
 import UpdateTaskService from '../Task/UpdateTaskService'
-import { ResponseMessage } from '@/frontend/models/ResponseMessage'
+import CreateColumnService from '../Column/CreateColumnService'
+import DeleteColumnService from '../Column/DeleteColumnService'
+import UpdateColumnService from '../Column/UpdateColumnService'
 
 interface BoardState {
   // TODO - move to global state
@@ -34,6 +37,16 @@ interface BoardState {
   columns: Column[]
   setColumns: (columns: Column[]) => void
   createColumn: () => void
+  deleteColumn: (columnId: { columnId: string }) => void
+  updateColumn: ({
+    id,
+    title,
+    order,
+  }: {
+    id: Column['id']
+    title?: Column['title']
+    order?: Column['order']
+  }) => void
 }
 
 const useBoardStore = create<BoardState>()((set, get) => ({
@@ -84,15 +97,6 @@ const useBoardStore = create<BoardState>()((set, get) => ({
     if (response.messages) {
       get().addMessages(response.messages)
     }
-
-    // if (!response.data?.success) {
-    //   set((state) => ({
-    //     tasks: {
-    //       ...state.tasks,
-    //       taskToBeDeleted,
-    //     },
-    //   }))
-    // }
   },
   updateTask: async (task) => {
     set((state) => ({
@@ -126,15 +130,71 @@ const useBoardStore = create<BoardState>()((set, get) => ({
 
   columns: [],
   setColumns: (columns) => set(() => ({ columns: columns })),
-  createColumn: () => {
+  createColumn: async () => {
     const newColumn: Column = new Column({
-      id: generateId(),
-      title: `Column ${creativeColumns.length + 1}`,
+      title: `New Column`,
     })
 
-    // TODO - call graphql mutation to create column
-
     set((state) => ({ columns: [...state.columns, newColumn] }))
+
+    const response = await new CreateColumnService().execute({
+      column: newColumn,
+    })
+
+    if (response.messages) {
+      get().addMessages(response.messages)
+    }
+
+    if (!response.data?.success) {
+      set((state) => ({
+        columns: state.columns.filter((column) => column.id !== newColumn.id),
+      }))
+    }
+  },
+  deleteColumn: async ({ columnId }) => {
+    let columnToBeDeleted: Column | undefined
+
+    set((state) => {
+      columnToBeDeleted = state.columns.find((column) => column.id === columnId)
+
+      return {
+        columns: state.columns.filter((column) => column.id !== columnId),
+      }
+    })
+
+    const response = await new DeleteColumnService().execute({ columnId })
+
+    if (response.messages) {
+      get().addMessages(response.messages)
+    }
+  },
+  updateColumn: async (column) => {
+    set((state) => ({
+      columns: state.columns.map((t) => {
+        if (t.id === column.id) {
+          return {
+            ...t,
+            ...column,
+          }
+        }
+
+        return t
+      }),
+    }))
+
+    const response = await new UpdateColumnService().execute({
+      id: column.id,
+      title: column.title,
+      order: column.order,
+    })
+
+    if (response.messages) {
+      get().addMessages(response.messages)
+    }
+
+    if (!response.data?.success) {
+      // TODO - revert state
+    }
   },
 }))
 

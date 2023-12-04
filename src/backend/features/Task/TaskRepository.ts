@@ -33,16 +33,6 @@ export default class TaskRepository extends Repository<AppPrismaClient> {
     return tasks.map((task) => new Task(task as Task))
   }
 
-  // async findById({ id }: { id: string }): Promise<Task | null> {
-  //   if (!authUserId) {
-  //     throw Error('AuthUserId is required')
-  //   }
-  //   const task = await this.client.task.findUnique({
-  //     where: { id, createdByUserId: authUserId, deletedAt: null },
-  //   })
-  //   return task ? new Task(task as Task) : null
-  // }
-
   async create({
     task,
     authUserId,
@@ -101,17 +91,6 @@ export default class TaskRepository extends Repository<AppPrismaClient> {
     }
   }
 
-  // async update(id: string, data: Partial<Task>): Promise<Task | null> {
-  //   if (!authUserId) {
-  //     throw Error('AuthUserId is required')
-  //   }
-  //   const task = await this.client.task.update({
-  //     where: { id, deletedAt: null },
-  //     data,
-  //   })
-  //   return new Task(task as Task)
-  // }
-
   async delete({
     taskId,
     authUserId,
@@ -124,9 +103,6 @@ export default class TaskRepository extends Repository<AppPrismaClient> {
     if (!authUserId) {
       throw Error('AuthUserId is required')
     }
-
-    console.log('taskId', taskId)
-    console.log('authUserId', authUserId)
 
     const task = await this.client.task.update({
       where: { id: taskId, createdByUserId: authUserId },
