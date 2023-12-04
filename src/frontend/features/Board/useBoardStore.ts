@@ -4,12 +4,12 @@ import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
 import { generateId } from '@/shared/types/Id'
 import { creativeColumns } from '../../../app/api/seed/mockDB'
-import CreateTaskService from '../Task/CreateTaskService'
-import DeleteTaskService from '../Task/DeleteTaskService'
-import UpdateTaskService from '../Task/UpdateTaskService'
 import CreateColumnService from '../Column/CreateColumnService'
 import DeleteColumnService from '../Column/DeleteColumnService'
 import UpdateColumnService from '../Column/UpdateColumnService'
+import CreateTaskService from '../Task/CreateTaskService'
+import DeleteTaskService from '../Task/DeleteTaskService'
+import UpdateTaskService from '../Task/UpdateTaskService'
 
 interface BoardState {
   // TODO - move to global state
