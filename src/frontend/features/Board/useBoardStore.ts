@@ -6,9 +6,14 @@ import { creativeColumns } from '../../../app/api/seed/mockDB'
 import CreateTaskService from '../Task/CreateTaskService'
 import DeleteTaskService from '../Task/DeleteTaskService'
 import UpdateTaskService from '../Task/UpdateTaskService'
+import { ResponseMessage } from '@/frontend/models/ResponseMessage'
 
 interface BoardState {
-  // messages: ResponseMessage[]
+  // TODO - move to global state
+  messages: ResponseMessage[]
+  addMessages: (messages: ResponseMessage[]) => void
+  addMessage: (message: ResponseMessage) => void
+  removeMessage: (message: ResponseMessage) => void
 
   tasks: Task[]
   setTasks: (tasks: Task[]) => void
@@ -31,8 +36,15 @@ interface BoardState {
   createColumn: () => void
 }
 
-const useBoardStore = create<BoardState>()((set) => ({
+const useBoardStore = create<BoardState>()((set, get) => ({
   messages: [],
+  addMessages: (messages) =>
+    set((state) => ({ messages: [...state.messages, ...messages] })),
+  addMessage: (message) =>
+    set((state) => ({ messages: [...state.messages, message] })),
+  removeMessage: (message) =>
+    set((state) => ({ messages: state.messages.filter((m) => m !== message) })),
+
   tasks: [],
   setTasks: (tasks) => set(() => ({ tasks: tasks })),
   createTask: async ({ columnId }) => {
@@ -45,6 +57,11 @@ const useBoardStore = create<BoardState>()((set) => ({
     set((state) => ({ tasks: [...state.tasks, newTask] }))
 
     const response = await new CreateTaskService().execute({ task: newTask })
+
+    if (response.messages) {
+      get().addMessages(response.messages)
+    }
+
     if (!response.data?.success) {
       set((state) => ({
         tasks: state.tasks.filter((task) => task.id !== newTask.id),
@@ -63,6 +80,11 @@ const useBoardStore = create<BoardState>()((set) => ({
     })
 
     const response = await new DeleteTaskService().execute({ taskId })
+
+    if (response.messages) {
+      get().addMessages(response.messages)
+    }
+
     // if (!response.data?.success) {
     //   set((state) => ({
     //     tasks: {
@@ -92,6 +114,10 @@ const useBoardStore = create<BoardState>()((set) => ({
       content: task.content,
       order: task.order,
     })
+
+    if (response.messages) {
+      get().addMessages(response.messages)
+    }
 
     if (!response.data?.success) {
       // TODO - revert state
