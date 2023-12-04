@@ -5,7 +5,7 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "role" TEXT DEFAULT 'user',
-    "photo" TEXT DEFAULT 'default.png',
+    "picture" TEXT DEFAULT 'default.png',
     "verified" BOOLEAN DEFAULT false,
     "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME,

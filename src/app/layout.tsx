@@ -1,10 +1,13 @@
-import { Inter as FontSans } from 'next/font/google'
 import GetAuthUserService from '@/frontend/features/Auth/GetAuthUserService'
 import { NextAuthProvider } from '@/frontend/features/Auth/NextAuthProvider'
 import AppContainer from '@/frontend/features/Layout/AppContainer'
 import '@/frontend/styles/globals.css'
 import { cn } from '@/shared/utilities/classNameMerge'
 import type { Metadata } from 'next'
+import { Inter as FontSans } from 'next/font/google'
+// import apolloClient from '@/frontend/infra/Apollo/ApolloClient'
+// import { ApolloProvider } from '@apollo/client'
+import { ApolloWrapper } from '@/frontend/infra/Apollo/ApolloWrapper'
 
 const inter = FontSans({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -30,9 +33,11 @@ export default async function RootLayout({
         )}
       >
         <NextAuthProvider authUser={authUser}>
-          {/* <ApolloProvider client={apolloClient}> */}
-          <AppContainer>{children}</AppContainer>
-          {/* </ApolloProvider> */}
+          <ApolloWrapper>
+            {/* <ApolloProvider client={apolloClient}> */}
+            <AppContainer>{children}</AppContainer>
+            {/* </ApolloProvider> */}
+          </ApolloWrapper>
         </NextAuthProvider>
       </body>
     </html>

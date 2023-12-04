@@ -1,12 +1,12 @@
 import GetAuthUserUsecase from '@/backend/features/User/GetAuthUserUsecase'
-import User from '@/shared/entities/User'
+import AuthUser from '@/shared/entities/AuthUser'
 import { Controller, ControllerResponse } from './Controller'
 
 export default abstract class PrivateController<
   TRequest,
   TResponse,
 > extends Controller<TRequest, TResponse> {
-  protected authUserId: User['id'] | undefined
+  protected authUser: AuthUser | undefined
 
   constructor() {
     super()
@@ -15,13 +15,13 @@ export default abstract class PrivateController<
   public async execute(request?: TRequest) {
     try {
       const response = await new GetAuthUserUsecase().execute()
-      const authUserId = response.user?.id
+      const authUser = response.user
 
-      if (!authUserId) {
+      if (!authUser) {
         throw new Error('User is not logged in')
       }
 
-      this.authUserId = authUserId
+      this.authUser = authUser
 
       return this.executeImpl(request)
     } catch (error) {

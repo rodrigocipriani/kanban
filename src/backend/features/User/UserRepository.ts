@@ -10,9 +10,16 @@ type FindByEmailParams = {
   includePassword?: boolean
 }
 
+// TODO - should be implemented some secure to prevent data leak
 export default class UserRepository extends Repository<AppPrismaClient> {
   constructor({ client }: { client?: AppPrismaClient } = {}) {
     super({ client: client || appPrismaClient })
+  }
+
+  async findAll(): Promise<User[]> {
+    const users = await this.client.user.findMany({})
+
+    return users.map((user) => new User(user))
   }
 
   async findByEmail({

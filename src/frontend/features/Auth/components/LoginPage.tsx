@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { Card } from '@/design-system/ui/Card'
 import Typography from '@/design-system/ui/Typography'
 import Login from './Login'

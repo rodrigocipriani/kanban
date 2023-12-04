@@ -9,17 +9,25 @@ export default class User extends Entity {
   email: string
   password: string
   role: string
-  photo: string
+  picture: string
   verified: boolean
 
-  constructor({ id, name, email, password, role, photo, verified }: UserProps) {
+  constructor({
+    id,
+    name,
+    email,
+    password,
+    role,
+    picture,
+    verified,
+  }: UserProps) {
     super({ id })
 
     this.name = name
     this.email = email
     this.password = password
     this.role = role || 'user'
-    this.photo = photo || 'default.png'
+    this.picture = picture || 'default.png'
     this.verified = verified || false
   }
 }

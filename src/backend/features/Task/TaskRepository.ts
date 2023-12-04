@@ -24,4 +24,31 @@ export default class TaskRepository extends Repository<AppPrismaClient> {
 
     return tasks.map((task) => new Task(task as Task))
   }
+
+  async findById({ id }: { id: string }): Promise<Task | null> {
+    const task = await this.client.task.findUnique({
+      where: { id },
+    })
+    return task ? new Task(task as Task) : null
+  }
+
+  async create(data: Task): Promise<Task | null> {
+    const task = await this.client.task.create({ data })
+    return new Task(task as Task)
+  }
+
+  async update(id: string, data: Partial<Task>): Promise<Task | null> {
+    const task = await this.client.task.update({
+      where: { id },
+      data,
+    })
+    return new Task(task as Task)
+  }
+
+  async delete(id: string): Promise<Task | null> {
+    const task = await this.client.task.delete({
+      where: { id },
+    })
+    return new Task(task as Task)
+  }
 }

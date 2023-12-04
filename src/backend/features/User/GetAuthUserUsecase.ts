@@ -1,12 +1,12 @@
 import { getServerSession } from 'next-auth'
 import Usecase from '@/backend/models/Usecase'
-import { authOptions } from '@/shared/Auth/authOptions'
-import User from '@/shared/entities/User'
+import { authOptions } from '@/shared/config/authOptions'
+import AuthUser from '@/shared/entities/AuthUser'
 
 type GetAuthUserUsecaseRequest = never
 
 type GetAuthUserUsecaseResponse = {
-  user: User
+  user: AuthUser
 }
 
 export default class GetAuthUserUsecase extends Usecase<
@@ -19,7 +19,8 @@ export default class GetAuthUserUsecase extends Usecase<
 
   async execute(): Promise<GetAuthUserUsecaseResponse> {
     const session = await getServerSession(authOptions)
-    const user = session?.user as User
+
+    const user = session?.user as AuthUser
 
     if (!user) throw new Error('User is not logged in')
 

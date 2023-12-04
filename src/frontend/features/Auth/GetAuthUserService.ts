@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth'
 import GetAuthUserEndpoint from '@/frontend/infra/NextEndpoints/GetAuthUserEndpoint'
 import Service, { ServiceResponse } from '@/frontend/models/Service'
-import { authOptions } from '@/shared/Auth/authOptions'
+import { authOptions } from '@/shared/config/authOptions'
 import User from '@/shared/entities/User'
 
 type GetAuthUserServiceRequest = never

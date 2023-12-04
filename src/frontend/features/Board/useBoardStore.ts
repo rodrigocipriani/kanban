@@ -15,7 +15,8 @@ interface BoardState {
 }
 
 const useBoardStore = create<BoardState>()((set) => ({
-  tasks: creativeTasks,
+  tasks: [],
+  // tasks: creativeTasks,
   setTasks: (tasks) => set(() => ({ tasks: tasks })),
   createTask: ({ columnId }) => {
     const newTask: Task = new Task({
@@ -29,7 +30,8 @@ const useBoardStore = create<BoardState>()((set) => ({
 
     set((state) => ({ tasks: [...state.tasks, newTask] }))
   },
-  columns: creativeColumns,
+  columns: [],
+  // columns: creativeColumns,
   setColumns: (columns) => set(() => ({ columns: columns })),
   createColumn: () => {
     const newColumn: Column = new Column({

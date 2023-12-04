@@ -32,11 +32,11 @@ export default class GetTasksController extends PrivateController<
     try {
       let data = null
 
-      if (!this.authUserId) throw new Error('User is not logged in')
+      if (!this.authUser) throw new Error('User is not logged in')
 
       data = await this.useCase.execute({
         columnId,
-        authUserId: this.authUserId,
+        authUserId: this.authUser.id,
       })
 
       return new ControllerResponse({

@@ -3,19 +3,20 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 
 import UserRepository from '@/backend/features/User/UserRepository'
 
-import type { NextAuthOptions } from 'next-auth'
+import type { NextAuthOptions, Session } from 'next-auth'
 
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
   },
+  // jwt: {},
   pages: {
     signIn: '/login',
   },
   providers: [
     CredentialsProvider({
-      name: 'Sign in',
-      type: 'credentials',
+      // name: 'Sign in',
+      // type: 'credentials',
       credentials: {
         email: {
           label: 'Email',
@@ -40,29 +41,27 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        return user
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          image: user.picture,
+        }
       },
     }),
   ],
   callbacks: {
-    session: ({ session, token }) => {
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: token.id,
-        },
-      }
-    },
-    jwt: ({ token, user }) => {
+    jwt: ({ token, account, user, profile, session, trigger }) => {
       if (user) {
-        const u = user as unknown as any
-        return {
-          ...token,
-          id: u.id,
-        }
+        token.email = user.email
+        token.email = user.email
+        token.name = user.name
+        token.picture = user.image
       }
-      return token
+      return { ...token, ...user }
+    },
+    session: ({ session, token, user, newSession, trigger }) => {
+      return { ...session, user: token }
     },
   },
 }
