@@ -1,4 +1,4 @@
-# Mini Trello/Kanban
+# Kanban
 
 ## Project Overview
 
@@ -9,18 +9,29 @@ Mini Trello/Kanban is a web-based project management tool inspired by Trello and
 - **Drag & Drop Interface**: Easily move cards between columns.
 - **CRUD Operations**: Add, remove, and update cards.
 - **Sorting Options**: Organize cards by date of creation or custom order.
-- **Technology Stack**: React with Hooks, Tailwind CSS, Apollo Client GraphQL for the frontend, and Node.js/Python for the backend.
+- **Technology Stack**: React with NextJs app router, Tailwind CSS, Apollo Client GraphQL for the frontend, and Node.js and Prisma for the backend.
 
 ## Getting Started
 
-## Getting Started
-
-First, run the development server:
+1. First, run the development server:
 
 ```bash
+
+cp .env.example ./env
+
+bun i
+
 bun run dev
+
 ```
 
-# TODOs
+2. Open `http://localhost:3000/api/seed` if you want to seed with examples
 
-- [ ] Capture Services messages and show in Toasts
+3. Open `http://localhost:3000/` to do the login
+
+```
+User: admin@admin.com
+Passworkd: password123
+```
+
+4. Enjoy 🤗
