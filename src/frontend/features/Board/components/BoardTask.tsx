@@ -7,9 +7,9 @@ import {
   CardTitle,
 } from '@/design-system/ui/Card'
 import { Skeleton } from '@/design-system/ui/Skeleton'
+import Typography from '@/design-system/ui/Typography'
 import Task from '@/shared/entities/Task'
 import useBoardStore from '../useBoardStore'
-import Typography from '@/design-system/ui/Typography'
 
 export default function BoardTask({ taskId }: { taskId: Task['id'] }) {
   const task = useBoardStore((state) =>

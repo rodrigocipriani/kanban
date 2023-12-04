@@ -8,7 +8,7 @@ import {
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support/ssr'
 
-function makeClient() {
+export function makeApolloClient() {
   const httpLink = new HttpLink({
     uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT,
   })
@@ -29,7 +29,7 @@ function makeClient() {
 
 export function ApolloWrapper({ children }: React.PropsWithChildren) {
   return (
-    <ApolloNextAppProvider makeClient={makeClient}>
+    <ApolloNextAppProvider makeClient={makeApolloClient}>
       {children}
     </ApolloNextAppProvider>
   )

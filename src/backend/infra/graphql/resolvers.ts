@@ -1,8 +1,8 @@
 import ColumnRepository from '@/backend/features/Column/ColumnRepository'
 import TaskRepository from '@/backend/features/Task/TaskRepository'
 import UserRepository from '@/backend/features/User/UserRepository'
-import Column from '@/shared/entities/Column'
 import AuthUser from '@/shared/entities/AuthUser'
+import Column from '@/shared/entities/Column'
 
 const columnRepository = new ColumnRepository()
 const taskRepository = new TaskRepository()

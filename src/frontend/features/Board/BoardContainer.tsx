@@ -1,23 +1,24 @@
 'use client'
 
-import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 import { useEffect } from 'react'
 import Typography from '@/design-system/ui/Typography'
+import useService from '@/frontend/helpers/useService'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
-import { GetAllColumns } from '../Column/GetAllColumns.graphql'
-import { GetAllTasks } from '../Task/GetAllTasks.graphql'
+import GetTasksService from '../Task/GetAllColumnsWithTasksService'
 import BoardColumnsContainer from './components/BoardColumnsContainer'
 import BoardWrapper from './components/BoardWrapperContainer'
 import useBoardStore from './useBoardStore'
 
 export default function BoardContainer() {
-  const { data: columnsData } = useSuspenseQuery<{ getAllColumns: Column[] }>(
-    GetAllColumns
-  )
-  const { data: tasksData } = useSuspenseQuery<{
-    getAllTasks: Task[]
-  }>(GetAllTasks)
+  const { execute, isLoading, result } = useService({
+    service: new GetTasksService(),
+  })
+
+  useEffect(() => {
+    execute()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const columns = useBoardStore((state) => state.columns)
   const tasks = useBoardStore((state) => state.tasks)
@@ -25,16 +26,11 @@ export default function BoardContainer() {
   const setTasks = useBoardStore((state) => state.setTasks)
 
   useEffect(() => {
-    if (columnsData) {
-      setColumns(columnsData.getAllColumns)
+    if (!isLoading && result?.data) {
+      setTasks(result.data.tasks)
+      setColumns(result.data.columns)
     }
-  }, [columnsData, setColumns])
-
-  useEffect(() => {
-    if (tasksData) {
-      setTasks(tasksData.getAllTasks)
-    }
-  }, [tasksData, setTasks])
+  }, [isLoading, result, setColumns, setTasks])
 
   const handleSetColumns = (columns: Column[]) => {
     setColumns(columns)

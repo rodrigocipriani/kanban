@@ -1,9 +1,9 @@
-import GetAuthUserController from '@/backend/features/User/GetAuthUserController'
-import { resolvers } from '@/backend/infra/graphql/resolvers'
-import { typeDefs } from '@/backend/infra/graphql/typeDefs'
 import { ApolloServer } from '@apollo/server'
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
 import { NextRequest, NextResponse } from 'next/server'
+import GetAuthUserController from '@/backend/features/User/GetAuthUserController'
+import { resolvers } from '@/backend/infra/graphql/resolvers'
+import { typeDefs } from '@/backend/infra/graphql/typeDefs'
 
 const server = new ApolloServer({
   typeDefs: typeDefs,
