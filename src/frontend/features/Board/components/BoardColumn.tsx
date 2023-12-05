@@ -8,6 +8,7 @@ import { Skeleton } from '@/design-system/ui/Skeleton'
 import Typography from '@/design-system/ui/Typography'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
+import { cn } from '@/shared/utilities/classNameMerge'
 import useBoardStore from '../useBoardStore'
 import BoardTask from './BoardTask'
 
@@ -41,24 +42,11 @@ export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
     disabled: editMode,
   })
 
-  if (!column) return null
+  if (!column) return <ColumnSkeleton />
 
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
-  }
-
-  if (isDragging) {
-    return (
-      <div ref={setNodeRef} style={style} className="flex w-80 flex-col">
-        <Skeleton className="m-4 h-16" />
-        <Skeleton className="m-4 h-32" />
-        <Skeleton className="m-4 h-32" />
-        <Skeleton className="m-4 h-32 opacity-50" />
-        <Skeleton className="m-4 h-32 opacity-20" />
-        <Skeleton className="m-4 h-32 opacity-5" />
-      </div>
-    )
   }
 
   const handleDelete = () => {
@@ -86,13 +74,17 @@ export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
   }
 
   return (
-    <div style={style} ref={setNodeRef} className="relative flex flex-col">
-      <div
-        {...attributes}
-        {...listeners}
-        className="group/columnTitle p-4"
-        onClick={handleStartEdit}
-      >
+    <div
+      {...attributes}
+      {...listeners}
+      style={style}
+      ref={setNodeRef}
+      className={cn(
+        'relative flex flex-col',
+        isDragging ? 'animate-pulse opacity-20' : ''
+      )}
+    >
+      <div className="group/columnTitle p-4" onClick={handleStartEdit}>
         {editMode ? (
           <Input
             className="w-full"
@@ -115,14 +107,15 @@ export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
             }}
           />
         ) : (
-          <Typography variant="h4">{column.title}</Typography>
+          <>
+            <Typography variant="h4">{column.title}</Typography>
+            <div className="invisible absolute right-0 top-3 group-hover/columnTitle:visible">
+              <Button size="sm" variant="ghost" onClick={handleDelete}>
+                <Icon icon="trash" />
+              </Button>
+            </div>
+          </>
         )}
-
-        <div className="invisible absolute right-0 top-0 group-hover/columnTitle:visible">
-          <Button size="sm" variant="ghost" onClick={handleDelete}>
-            <Icon icon="trash" />
-          </Button>
-        </div>
       </div>
       <div className="relative flex w-80 flex-col gap-4 overflow-y-auto rounded-md bg-slate-400 bg-opacity-50 p-4">
         {tasks.map((task: Task) => (
@@ -145,6 +138,19 @@ export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
           </Button>
         </div>
       </div>
+    </div>
+  )
+}
+
+export function ColumnSkeleton() {
+  return (
+    <div className="flex w-80 flex-col">
+      <Skeleton className="m-4 h-16" />
+      <Skeleton className="m-4 h-32" />
+      <Skeleton className="m-4 h-32" />
+      <Skeleton className="m-4 h-32 opacity-50" />
+      <Skeleton className="m-4 h-32 opacity-20" />
+      <Skeleton className="m-4 h-32 opacity-5" />
     </div>
   )
 }
