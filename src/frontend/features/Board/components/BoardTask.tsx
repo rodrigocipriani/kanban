@@ -11,6 +11,7 @@ import { Textarea } from '@/design-system/ui/Textarea'
 import Typography from '@/design-system/ui/Typography'
 import Task from '@/shared/entities/Task'
 import useBoardStore from '../useBoardStore'
+import { cn } from '@/shared/utilities/classNameMerge'
 
 export default function BoardTask({ taskId }: { taskId: Task['id'] }) {
   const task = useBoardStore((state) =>
@@ -44,14 +45,6 @@ export default function BoardTask({ taskId }: { taskId: Task['id'] }) {
     transform: CSS.Transform.toString(transform),
   }
 
-  if (isDragging) {
-    return (
-      <div ref={setNodeRef} style={style}>
-        <Skeleton className="h-32" />
-      </div>
-    )
-  }
-
   const handleDelete = () => {
     deleteTask({ taskId })
   }
@@ -79,7 +72,10 @@ export default function BoardTask({ taskId }: { taskId: Task['id'] }) {
         key={task.id}
       >
         <Card
-          className="group/taskCard relative h-32"
+          className={cn(
+            'group/taskCard relative h-32',
+            isDragging ? 'animate-pulse opacity-20' : ''
+          )}
           onClick={handleStartEdit}
         >
           <div className="invisible absolute right-0 top-0 group-hover/taskCard:visible">

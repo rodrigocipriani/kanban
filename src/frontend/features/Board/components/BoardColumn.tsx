@@ -75,16 +75,19 @@ export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
 
   return (
     <div
-      {...attributes}
-      {...listeners}
-      style={style}
       ref={setNodeRef}
       className={cn(
         'relative flex flex-col',
         isDragging ? 'animate-pulse opacity-20' : ''
       )}
+      style={style}
     >
-      <div className="group/columnTitle p-4" onClick={handleStartEdit}>
+      <div
+        {...attributes}
+        {...listeners}
+        className="group/columnTitle p-4"
+        onClick={handleStartEdit}
+      >
         {editMode ? (
           <Input
             className="w-full"
