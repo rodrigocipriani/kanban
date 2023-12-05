@@ -42,7 +42,7 @@ export default function BoardContainer() {
   }
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden p-4">
+    <div className="flex h-screen flex-col overflow-hidden overflow-x-auto p-4">
       <BoardWrapper
         columns={columns}
         tasks={tasks}
