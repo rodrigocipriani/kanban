@@ -49,17 +49,24 @@ export const typeDefs = gql`
   type Query {
     columns: [Column!]
     tasks: [Task!]
+  }
 
-    # getUser(id: ID!): User
-    # getAllUsers: [User!]
-    # getColumn(id: ID!): Column
-    # getTask(id: ID!): Task
+  input ColumnOrderInput {
+    id: ID!
+    order: Int!
+  }
+
+  input TaskOrderInput {
+    id: ID!
+    order: Int!
+    columnId: ID!
   }
 
   type Mutation {
     createColumn(id: ID!, title: String!, order: Int): Success
     deleteColumn(columnId: ID!): Success
     updateColumn(id: ID!, title: String, order: Int): Success
+    updateColumnsOrder(columns: [ColumnOrderInput!]!): Success
 
     createTask(
       id: ID!
@@ -70,21 +77,6 @@ export const typeDefs = gql`
     ): Success
     deleteTask(taskId: ID!): Success
     updateTask(id: ID!, title: String, content: String, order: Int): Success
-
-    # createUser(name: String!, email: String!, password: String!): User
-    # updateUser(
-    #   id: ID!
-    #   name: String
-    #   email: String
-    #   password: String
-    #   role: String
-    #   picture: String
-    #   verified: Boolean
-    # ): User
-    # deleteUser(id: ID!): User
-
-    # createColumn(title: String!, createdByUserId: String!): Column
-    # updateColumn(id: ID!, title: String, order: Int): Column
-    # deleteColumn(id: ID!): Column
+    updateTasksOrder(tasks: [TaskOrderInput]): Success
   }
 `

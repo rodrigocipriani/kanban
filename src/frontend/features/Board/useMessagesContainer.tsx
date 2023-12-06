@@ -13,7 +13,6 @@ export default function useMessagesContainer() {
   useEffect(() => {
     if (messages.length > 0) {
       messages.forEach((message) => {
-        console.log('message', message)
         toast({
           title: message.type === 'error' ? 'Error' : 'Success',
           description: message.message,

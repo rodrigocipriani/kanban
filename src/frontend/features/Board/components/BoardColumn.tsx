@@ -9,15 +9,19 @@ import Typography from '@/design-system/ui/Typography'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
 import { cn } from '@/shared/utilities/classNameMerge'
+import { BoardItemType } from '../BoardItemType'
 import useBoardStore from '../useBoardStore'
 import BoardTask from './BoardTask'
 
-export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
+export default function BoardColumn({
+  columnId,
+  tasksIds,
+}: {
+  columnId: Column['id']
+  tasksIds: Task['id'][]
+}) {
   const column = useBoardStore((state) =>
     state.columns.find((c) => c.id === columnId)
-  )
-  const tasks = useBoardStore((state) =>
-    state.tasks.filter((t) => t.columnId === columnId)
   )
   const createTask = useBoardStore((state) => state.createTask)
   const updateColumn = useBoardStore((state) => state.updateColumn)
@@ -36,8 +40,7 @@ export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
   } = useSortable({
     id: columnId,
     data: {
-      type: 'Column',
-      column,
+      type: BoardItemType.Column,
     },
     disabled: editMode,
   })
@@ -121,10 +124,13 @@ export default function BoardColumn({ columnId }: { columnId: Column['id'] }) {
         )}
       </div>
       <div className="relative flex w-80 flex-col gap-4 overflow-y-auto rounded-md bg-slate-400 bg-opacity-50 p-4">
-        {tasks.map((task: Task) => (
-          <div key={task.id}>
-            <BoardTask taskId={task.id} />
+        {tasksIds.length === 0 && (
+          <div className="flex h-32 flex-col items-center justify-center">
+            <Typography variant="h6">No tasks</Typography>
           </div>
+        )}
+        {tasksIds.map((taskId) => (
+          <BoardTask key={taskId} taskId={taskId} />
         ))}
         <div className="sticky bottom-0 w-full">
           <Button

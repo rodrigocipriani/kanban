@@ -6,12 +6,12 @@ import { Card, CardContent, CardHeader } from '@/design-system/ui/Card'
 import { Dialog, DialogContent, DialogHeader } from '@/design-system/ui/Dialog'
 import Icon from '@/design-system/ui/Icon'
 import { Input } from '@/design-system/ui/Input'
-import { Skeleton } from '@/design-system/ui/Skeleton'
 import { Textarea } from '@/design-system/ui/Textarea'
 import Typography from '@/design-system/ui/Typography'
 import Task from '@/shared/entities/Task'
-import useBoardStore from '../useBoardStore'
 import { cn } from '@/shared/utilities/classNameMerge'
+import { BoardItemType } from '../BoardItemType'
+import useBoardStore from '../useBoardStore'
 
 export default function BoardTask({ taskId }: { taskId: Task['id'] }) {
   const task = useBoardStore((state) =>
@@ -32,8 +32,7 @@ export default function BoardTask({ taskId }: { taskId: Task['id'] }) {
   } = useSortable({
     id: taskId,
     data: {
-      type: 'Task',
-      task,
+      type: BoardItemType.Task,
     },
     disabled: editMode,
   })
@@ -64,13 +63,7 @@ export default function BoardTask({ taskId }: { taskId: Task['id'] }) {
 
   return (
     <>
-      <div
-        ref={setNodeRef}
-        style={style}
-        {...attributes}
-        {...listeners}
-        key={task.id}
-      >
+      <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
         <Card
           className={cn(
             'group/taskCard relative h-32',

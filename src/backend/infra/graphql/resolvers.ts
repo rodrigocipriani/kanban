@@ -2,10 +2,14 @@ import CreateColumnUsecase from '@/backend/features/Column/CreateColumnUsecase'
 import DeleteColumnUsecase from '@/backend/features/Column/DeleteColumnUsecase'
 import GetColumnsUsecase from '@/backend/features/Column/GetColumnsUsecase'
 import UpdateColumnUsecase from '@/backend/features/Column/UpdateColumnUsecase'
+import UpdateColumnsOrderUsecase from '@/backend/features/Column/UpdateColumnsOrderUsecase'
 import CreateTaskUsecase from '@/backend/features/Task/CreateTaskUsecase'
 import DeleteTaskUsecase from '@/backend/features/Task/DeleteTaskUsecase'
 import GetTasksUsecase from '@/backend/features/Task/GetTasksUsecase'
 import UpdateTaskUsecase from '@/backend/features/Task/UpdateTaskUsecase'
+import UpdateTasksOrderUsecase from '@/backend/features/Task/UpdateTasksOrderUsecase'
+import { ColumnOrderUpdateParamDTO } from '@/frontend/features/Column/ColumnOrderUpdateParamDTO'
+import { TaskOrderUpdateParamDTO } from '@/frontend/features/Task/TaskOrderUpdateParamDTO'
 import AuthUser from '@/shared/entities/AuthUser'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
@@ -97,6 +101,20 @@ export const resolvers = {
         authUserId: context.authUser.id,
       })
     },
+    updateTasksOrder: async (
+      _: never,
+      { tasks }: { tasks: TaskOrderUpdateParamDTO[] },
+      context: { authUser?: AuthUser }
+    ) => {
+      if (!context.authUser) {
+        throw new Error('Authentication required')
+      }
+
+      return new UpdateTasksOrderUsecase().execute({
+        tasks,
+        authUserId: context.authUser.id,
+      })
+    },
 
     createColumn: async (
       _: never,
@@ -141,6 +159,20 @@ export const resolvers = {
         id,
         title,
         order,
+        authUserId: context.authUser.id,
+      })
+    },
+    updateColumnsOrder: async (
+      _: never,
+      { columns }: { columns: ColumnOrderUpdateParamDTO[] },
+      context: { authUser?: AuthUser }
+    ) => {
+      if (!context.authUser) {
+        throw new Error('Authentication required')
+      }
+
+      return new UpdateColumnsOrderUsecase().execute({
+        columns,
         authUserId: context.authUser.id,
       })
     },

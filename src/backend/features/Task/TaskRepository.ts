@@ -2,6 +2,7 @@ import appPrismaClient, {
   AppPrismaClient,
 } from '@/backend/infra/appPrismaClient'
 import Repository from '@/backend/models/Repository'
+import { TaskOrderUpdateParamDTO } from '@/frontend/features/Task/TaskOrderUpdateParamDTO'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
 import User from '@/shared/entities/User'
@@ -88,6 +89,33 @@ export default class TaskRepository extends Repository<AppPrismaClient> {
 
     return {
       success: !!updatedTask,
+    }
+  }
+
+  async updateTasksOrder({
+    tasks,
+    authUserId,
+  }: {
+    tasks: TaskOrderUpdateParamDTO[]
+    authUserId: User['id']
+  }): Promise<{
+    success: boolean
+  }> {
+    if (!authUserId) {
+      throw Error('AuthUserId is required')
+    }
+
+    const updates = tasks.map((task) => {
+      return this.client.task.update({
+        where: { id: task.id },
+        data: { order: task.order, columnId: task.columnId },
+      })
+    })
+
+    await this.client.$transaction(updates)
+
+    return {
+      success: !!(await this.client.$transaction(updates)),
     }
   }
 

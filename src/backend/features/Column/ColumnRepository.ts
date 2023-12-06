@@ -2,6 +2,7 @@ import appPrismaClient, {
   AppPrismaClient,
 } from '@/backend/infra/appPrismaClient'
 import Repository from '@/backend/models/Repository'
+import { ColumnOrderUpdateParamDTO } from '@/frontend/features/Column/ColumnOrderUpdateParamDTO'
 import Column from '@/shared/entities/Column'
 import User from '@/shared/entities/User'
 
@@ -77,6 +78,33 @@ export default class ColumnRepository extends Repository<AppPrismaClient> {
 
     return {
       success: !!updatedColumn,
+    }
+  }
+
+  async updateColumnsOrder({
+    columns,
+    authUserId,
+  }: {
+    columns: ColumnOrderUpdateParamDTO[]
+    authUserId: User['id']
+  }): Promise<{
+    success: boolean
+  }> {
+    if (!authUserId) {
+      throw Error('AuthUserId is required')
+    }
+
+    const updates = columns.map((column) => {
+      return this.client.column.update({
+        where: { id: column.id },
+        data: { order: column.order },
+      })
+    })
+
+    await this.client.$transaction(updates)
+
+    return {
+      success: !!(await this.client.$transaction(updates)),
     }
   }
 
