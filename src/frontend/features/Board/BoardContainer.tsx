@@ -36,9 +36,12 @@ export default function BoardContainer() {
       <div className="pb-4">
         <Typography variant="h3">Kanban Board</Typography>
       </div>
-      {isLoading && <BoardColumnsContainerSkeleton />}
       {/* For now just exist one Board, in future we should pass boardId */}
-      <BoardColumnsContainer columns={columns} tasks={tasks} />
+      {isLoading ? (
+        <BoardColumnsContainerSkeleton />
+      ) : (
+        <BoardColumnsContainer columns={columns} tasks={tasks} />
+      )}
     </div>
   )
 }
