@@ -72,13 +72,6 @@ const useBoardStore = create<BoardState>()((set, get) => ({
     set(() => ({ tasks: tasks }))
   },
   updateTasksOrder: async (tasks) => {
-    get().addMessages([
-      {
-        type: 'success',
-        message: 'Tasks arent saved yet, so they will be reset on refresh.',
-      },
-    ])
-
     const response = await new UpdateTasksOrderService().execute({
       tasks,
     })
@@ -177,13 +170,6 @@ const useBoardStore = create<BoardState>()((set, get) => ({
     set(() => ({ columns: columns }))
   },
   updateColumnsOrder: async (columns) => {
-    get().addMessages([
-      {
-        type: 'success',
-        message: 'Columns arent saved yet, so they will be reset on refresh.',
-      },
-    ])
-
     const response = await new UpdateColumnsOrderService().execute({
       columns,
     })
