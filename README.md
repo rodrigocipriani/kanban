@@ -1,5 +1,11 @@
 # Kanban
 
+```
+
+🚨 Project not ready 🚨
+
+```
+
 ## Project Overview
 
 Mini Trello/Kanban is a web-based project management tool inspired by Trello and Kanban board concepts. It offers a dynamic interface for managing tasks and projects using cards and boards with drag and drop functionality.
