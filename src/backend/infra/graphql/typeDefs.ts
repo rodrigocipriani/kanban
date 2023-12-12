@@ -23,7 +23,7 @@ export const typeDefs = gql`
   type Column {
     id: ID!
     title: String!
-    order: Int
+    order: String
     createdByUserId: String!
     createdAt: String
     updatedAt: String
@@ -36,7 +36,7 @@ export const typeDefs = gql`
     id: ID!
     title: String!
     content: String
-    order: Int
+    order: String
     columnId: String!
     createdByUserId: String!
     createdAt: String
@@ -53,30 +53,36 @@ export const typeDefs = gql`
 
   input ColumnOrderInput {
     id: ID!
-    order: Int!
+    order: String!
   }
 
   input TaskOrderInput {
     id: ID!
-    order: Int!
+    order: String!
     columnId: ID!
   }
 
   type Mutation {
-    createColumn(id: ID!, title: String!, order: Int): Success
+    createColumn(id: ID!, title: String!, order: String): Success
     deleteColumn(columnId: ID!): Success
-    updateColumn(id: ID!, title: String, order: Int): Success
+    updateColumn(id: ID!, title: String, order: String): Success
     updateColumnsOrder(columns: [ColumnOrderInput!]!): Success
 
     createTask(
-      id: ID!
+      id: ID
       title: String!
       content: String
-      order: Int
+      order: String
       columnId: String!
     ): Success
     deleteTask(taskId: ID!): Success
-    updateTask(id: ID!, title: String, content: String, order: Int): Success
+    updateTask(
+      id: ID!
+      title: String
+      content: String
+      order: String
+      columnId: ID
+    ): Success
     updateTasksOrder(tasks: [TaskOrderInput]): Success
   }
 `

@@ -1,6 +1,6 @@
+import { Active, Over } from '@dnd-kit/core'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
-import { Active, Over } from '@dnd-kit/core'
 import { BoardItemType } from '../BoardItemType'
 
 type EventItemCustomProps = {

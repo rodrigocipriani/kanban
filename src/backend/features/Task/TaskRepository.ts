@@ -2,10 +2,10 @@ import appPrismaClient, {
   AppPrismaClient,
 } from '@/backend/infra/appPrismaClient'
 import Repository from '@/backend/models/Repository'
-import { TaskOrderUpdateParamDTO } from '@/frontend/features/Task/TaskOrderUpdateParamDTO'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
 import User from '@/shared/entities/User'
+import { produceOrder } from '@/shared/types/Order'
 
 export default class TaskRepository extends Repository<AppPrismaClient> {
   constructor({ client }: { client?: AppPrismaClient } = {}) {
@@ -35,10 +35,18 @@ export default class TaskRepository extends Repository<AppPrismaClient> {
   }
 
   async create({
-    task,
+    id,
+    title,
+    columnId,
+    content,
+    order,
     authUserId,
   }: {
-    task: Task
+    id?: Task['id']
+    title: Task['title']
+    columnId: Task['columnId']
+    content?: Task['content']
+    order?: Task['order']
     authUserId: User['id']
   }): Promise<{
     success: boolean
@@ -47,15 +55,36 @@ export default class TaskRepository extends Repository<AppPrismaClient> {
       throw Error('AuthUserId is required')
     }
 
+    let taskOrder = order
+
+    if (!taskOrder) {
+      const lastTask = await this.client.task.findFirst({
+        where: {
+          createdByUserId: authUserId,
+          columnId: columnId || undefined,
+          deletedAt: null,
+        },
+        orderBy: {
+          order: 'desc',
+        },
+      })
+
+      taskOrder = lastTask ? produceOrder(lastTask.order) : produceOrder()
+    }
+
     const newTask = await this.client.task.create({
       data: {
-        ...task,
+        id,
+        title,
+        columnId,
+        content: content || undefined,
+        order: taskOrder,
         createdByUserId: authUserId,
       },
     })
 
     return {
-      success: !!task,
+      success: !!newTask,
     }
   }
 
@@ -64,12 +93,14 @@ export default class TaskRepository extends Repository<AppPrismaClient> {
     title,
     content,
     order,
+    columnId,
     authUserId,
   }: {
     id: Task['id']
     title?: Task['title']
     content?: Task['content']
     order?: Task['order']
+    columnId?: Task['columnId']
     authUserId: User['id']
   }): Promise<{
     success: boolean
@@ -81,41 +112,15 @@ export default class TaskRepository extends Repository<AppPrismaClient> {
     const updatedTask = await this.client.task.update({
       where: { id, createdByUserId: authUserId },
       data: {
-        title,
-        content,
-        order,
+        title: title || undefined,
+        content: content || undefined,
+        columnId: columnId || undefined,
+        order: order?.toString(),
       },
     })
 
     return {
       success: !!updatedTask,
-    }
-  }
-
-  async updateTasksOrder({
-    tasks,
-    authUserId,
-  }: {
-    tasks: TaskOrderUpdateParamDTO[]
-    authUserId: User['id']
-  }): Promise<{
-    success: boolean
-  }> {
-    if (!authUserId) {
-      throw Error('AuthUserId is required')
-    }
-
-    const updates = tasks.map((task) => {
-      return this.client.task.update({
-        where: { id: task.id },
-        data: { order: task.order, columnId: task.columnId },
-      })
-    })
-
-    await this.client.$transaction(updates)
-
-    return {
-      success: !!(await this.client.$transaction(updates)),
     }
   }
 

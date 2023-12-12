@@ -2,16 +2,13 @@ import { create } from 'zustand'
 import { ResponseMessage } from '@/frontend/models/ResponseMessage'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
-import { ColumnOrderUpdateParamDTO } from '../Column/ColumnOrderUpdateParamDTO'
+import { produceOrder } from '@/shared/types/Order'
 import CreateColumnService from '../Column/CreateColumnService'
 import DeleteColumnService from '../Column/DeleteColumnService'
 import UpdateColumnService from '../Column/UpdateColumnService'
-import UpdateColumnsOrderService from '../Column/UpdateColumnsOrderService'
 import CreateTaskService from '../Task/CreateTaskService'
 import DeleteTaskService from '../Task/DeleteTaskService'
-import { TaskOrderUpdateParamDTO } from '../Task/TaskOrderUpdateParamDTO'
 import UpdateTaskService from '../Task/UpdateTaskService'
-import UpdateTasksOrderService from '../Task/UpdateTasksOrderService'
 
 type UpdateTasksOrder = {
   id: Task['id']
@@ -27,7 +24,6 @@ interface BoardState {
 
   tasks: Task[]
   setTasks: (tasks: Task[]) => void
-  updateTasksOrder: (tasks: TaskOrderUpdateParamDTO[]) => void
   createTask: (columnId: { columnId: string }) => void
   deleteTask: (taskId: { taskId: string }) => void
   updateTask: ({
@@ -35,16 +31,17 @@ interface BoardState {
     title,
     content,
     order,
+    columnId,
   }: {
     id: Task['id']
     title?: Task['title']
     content?: Task['content']
     order?: Task['order']
+    columnId?: Task['columnId']
   }) => void
 
   columns: Column[]
   setColumns: (columns: Column[]) => void
-  updateColumnsOrder: (columns: ColumnOrderUpdateParamDTO[]) => void
   createColumn: () => void
   deleteColumn: (columnId: { columnId: string }) => void
   updateColumn: ({
@@ -71,42 +68,17 @@ const useBoardStore = create<BoardState>()((set, get) => ({
   setTasks: (tasks) => {
     set(() => ({ tasks: tasks }))
   },
-  updateTasksOrder: async (tasks) => {
-    const response = await new UpdateTasksOrderService().execute({
-      tasks,
-    })
-
-    if (response.messages) {
-      get().addMessages(response.messages)
-    }
-
-    set((state) => ({
-      ...state,
-      tasks: state.tasks.map((task) => {
-        const newTask = tasks.find((t) => t.id === task.id)
-
-        if (newTask) {
-          return {
-            ...task,
-            order: newTask.order,
-            columnId: newTask.columnId,
-          }
-        }
-
-        return task
-      }),
-    }))
-  },
   createTask: async ({ columnId }) => {
     const newTask: Task = new Task({
       columnId,
       title: `New Task`,
       content: ``,
+      order: ``,
     })
 
     set((state) => ({ tasks: [...state.tasks, newTask] }))
 
-    const response = await new CreateTaskService().execute({ task: newTask })
+    const response = await new CreateTaskService().execute(newTask)
 
     if (response.messages) {
       get().addMessages(response.messages)
@@ -154,6 +126,7 @@ const useBoardStore = create<BoardState>()((set, get) => ({
       title: task.title,
       content: task.content,
       order: task.order,
+      columnId: task.columnId,
     })
 
     if (response.messages) {
@@ -169,34 +142,12 @@ const useBoardStore = create<BoardState>()((set, get) => ({
   setColumns: (columns) => {
     set(() => ({ columns: columns }))
   },
-  updateColumnsOrder: async (columns) => {
-    const response = await new UpdateColumnsOrderService().execute({
-      columns,
-    })
-
-    if (response.messages) {
-      get().addMessages(response.messages)
-    }
-
-    set((state) => ({
-      ...state,
-      columns: state.columns.map((column) => {
-        const newColumn = columns.find((c) => c.id === column.id)
-
-        if (newColumn) {
-          return {
-            ...column,
-            order: newColumn.order,
-          }
-        }
-
-        return column
-      }),
-    }))
-  },
   createColumn: async () => {
+    const lastColumn = get().columns[get().columns.length - 1]
+
     const newColumn: Column = new Column({
       title: `New Column`,
+      order: produceOrder(lastColumn?.order),
     })
 
     set((state) => ({ columns: [...state.columns, newColumn] }))

@@ -4,8 +4,12 @@ import User from '@/shared/entities/User'
 import TaskRepository from './TaskRepository'
 
 export type CreateTaskUsecaseRequest = {
-  task: Task
+  title: Task['title']
+  columnId: Task['columnId']
   authUserId: User['id']
+  id?: Task['id']
+  content?: Task['content']
+  order?: Task['order']
 }
 
 export type CreateTaskUsecaseResponse = {
@@ -26,18 +30,26 @@ export default class CreateTaskUsecase extends Usecase<
   async execute(
     params: CreateTaskUsecaseRequest
   ): Promise<CreateTaskUsecaseResponse> {
-    const { task, authUserId } = params
+    const { id, title, columnId, content, order, authUserId } = params
 
     if (!authUserId) {
       throw Error('User should be authenticated')
     }
 
-    if (!task) {
-      throw Error('Task is required')
+    if (!title) {
+      throw Error('Task title is required')
+    }
+
+    if (!columnId) {
+      throw Error('Task columnId is required')
     }
 
     const result = await this.taskRepository.create({
-      task: new Task(task),
+      id,
+      title,
+      columnId,
+      content,
+      order,
       authUserId: authUserId,
     })
 

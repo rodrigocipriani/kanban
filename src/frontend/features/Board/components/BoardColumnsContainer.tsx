@@ -5,26 +5,20 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-
 import { SortableContext, arrayMove } from '@dnd-kit/sortable'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-
 import { Button } from '@/design-system/ui/Button'
 import Icon from '@/design-system/ui/Icon'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
+import { produceOrder, sortArray } from '@/shared/types/Order'
 import isServerSide from '@/shared/utilities/isServerSide'
-import { TaskOrderUpdateParamDTO } from '../../Task/TaskOrderUpdateParamDTO'
 import { BoardItemType } from '../BoardItemType'
 import useBoardStore from '../useBoardStore'
 import BoardColumn, { ColumnSkeleton } from './BoardColumn'
 import BoardTask from './BoardTask'
 import customEventMapper from './customEventMapper'
-
-function sortOrderAsc(a: { order: number }, b: { order: number }) {
-  return (a?.order || 0) - (b?.order || 0)
-}
 
 type CurrentState = {
   [columnId: Column['id']]: Task['id'][]
@@ -36,9 +30,9 @@ type Props = {
 }
 
 export default function BoardColumnsContainer({ tasks, columns }: Props) {
-  const updateTasksOrder = useBoardStore((state) => state.updateTasksOrder)
-  const updateColumnsOrder = useBoardStore((state) => state.updateColumnsOrder)
   const createColumn = useBoardStore((state) => state.createColumn)
+  const updateTask = useBoardStore((state) => state.updateTask)
+  const updateColumn = useBoardStore((state) => state.updateColumn)
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -55,13 +49,12 @@ export default function BoardColumnsContainer({ tasks, columns }: Props) {
   const [currentState, setCurrentState] = useState<CurrentState>({})
 
   useEffect(() => {
-    let newColumns = structuredClone(columns).sort(sortOrderAsc)
-    let newTasks = structuredClone(tasks)
+    let newColumns = sortArray(columns)
+    let newTasks = sortArray(tasks)
 
     const newCurrentState: CurrentState = newColumns.reduce((acc, column) => {
       acc[column.id] = newTasks
         .filter((t) => t.columnId === column.id)
-        .sort(sortOrderAsc)
         .map((t) => t.id)
       return acc
     }, {} as CurrentState)
@@ -98,41 +91,59 @@ export default function BoardColumnsContainer({ tasks, columns }: Props) {
         if (!active) return
 
         if (active.type === BoardItemType.Column) {
-          let order = 1
-          updateColumnsOrder(
-            Object.keys(currentState).map((columnId) => ({
-              id: columnId,
-              order: order++,
-            }))
+          const currentColumnsItemns = Object.keys(currentState)
+
+          const currentColumnIndex = currentColumnsItemns.findIndex(
+            (columnId) => columnId === active.id
           )
+          const columnBeforeId = currentColumnsItemns[currentColumnIndex - 1]
+          const columnAfterId = currentColumnsItemns[currentColumnIndex + 1]
+          const columnAfter = columns.find(
+            (column) => column.id === columnAfterId
+          )
+          const columnBefore = columns.find(
+            (column) => column.id === columnBeforeId
+          )
+
+          const activeColumnNewOrder = produceOrder(
+            columnBefore?.order,
+            columnAfter?.order
+          )
+
+          updateColumn({
+            id: active.id,
+            order: activeColumnNewOrder,
+          })
         }
 
         if (active.type === BoardItemType.Task) {
-          const storagedColumnId = tasks.find((task) => task.id === active.id)
-            ?.columnId
           const currentColumnId = Object.entries(currentState).find(
             ([columnId, tasksIds]) => tasksIds.includes(active.id)
           )?.[0]
 
-          let columnsToUpdate = [storagedColumnId]
-          if (storagedColumnId !== currentColumnId) {
-            columnsToUpdate.push(currentColumnId)
-          }
+          if (!currentColumnId) return
 
-          let tasksToUpdate: TaskOrderUpdateParamDTO[] = []
-          columnsToUpdate.forEach((columnId) => {
-            if (!columnId) return
-            let order = 1
-            tasksToUpdate.push(
-              ...currentState[columnId].map((taskId) => ({
-                id: taskId,
-                columnId,
-                order: order++,
-              }))
-            )
+          const currentColumnItems = currentState[currentColumnId]
+
+          const activeTaskIndex = currentColumnItems.findIndex(
+            (taskId) => taskId === active.id
+          )
+
+          const taskBeforeId = currentColumnItems[activeTaskIndex - 1]
+          const taskAfterId = currentColumnItems[activeTaskIndex + 1]
+          const taskBefore = tasks.find((task) => task.id === taskBeforeId)
+          const taskAfter = tasks.find((task) => task.id === taskAfterId)
+
+          const activeTaskNewOrder = produceOrder(
+            taskBefore?.order,
+            taskAfter?.order
+          )
+
+          updateTask({
+            id: active.id,
+            order: activeTaskNewOrder,
+            columnId: currentColumnId,
           })
-
-          updateTasksOrder(tasksToUpdate)
         }
       }}
       onDragOver={(event) => {
@@ -143,9 +154,6 @@ export default function BoardColumnsContainer({ tasks, columns }: Props) {
 
         if (!data) return
         const { active, over } = data
-
-        console.log('active', active)
-        console.log('over', over)
 
         if (!over) return
 

@@ -8,6 +8,7 @@ export type UpdateTaskUsecaseRequest = {
   title: Task['title']
   content?: Task['content']
   order?: Task['order']
+  columnId?: Task['columnId']
   authUserId: User['id']
 }
 
@@ -29,7 +30,7 @@ export default class UpdateTaskUsecase extends Usecase<
   async execute(
     params: UpdateTaskUsecaseRequest
   ): Promise<UpdateTaskUsecaseResponse> {
-    const { id, title, content, order, authUserId } = params
+    const { id, title, content, order, authUserId, columnId } = params
 
     if (!authUserId) {
       throw Error('User should be authenticated')
@@ -39,15 +40,12 @@ export default class UpdateTaskUsecase extends Usecase<
       throw Error('Task ID is required')
     }
 
-    if (!title) {
-      throw Error('Title is required')
-    }
-
     const result = await this.taskRepository.update({
       id,
       title,
       content,
       order,
+      columnId,
       authUserId: authUserId,
     })
 

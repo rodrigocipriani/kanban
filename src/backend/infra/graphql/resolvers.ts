@@ -2,14 +2,10 @@ import CreateColumnUsecase from '@/backend/features/Column/CreateColumnUsecase'
 import DeleteColumnUsecase from '@/backend/features/Column/DeleteColumnUsecase'
 import GetColumnsUsecase from '@/backend/features/Column/GetColumnsUsecase'
 import UpdateColumnUsecase from '@/backend/features/Column/UpdateColumnUsecase'
-import UpdateColumnsOrderUsecase from '@/backend/features/Column/UpdateColumnsOrderUsecase'
 import CreateTaskUsecase from '@/backend/features/Task/CreateTaskUsecase'
 import DeleteTaskUsecase from '@/backend/features/Task/DeleteTaskUsecase'
 import GetTasksUsecase from '@/backend/features/Task/GetTasksUsecase'
 import UpdateTaskUsecase from '@/backend/features/Task/UpdateTaskUsecase'
-import UpdateTasksOrderUsecase from '@/backend/features/Task/UpdateTasksOrderUsecase'
-import { ColumnOrderUpdateParamDTO } from '@/frontend/features/Column/ColumnOrderUpdateParamDTO'
-import { TaskOrderUpdateParamDTO } from '@/frontend/features/Task/TaskOrderUpdateParamDTO'
 import AuthUser from '@/shared/entities/AuthUser'
 import Column from '@/shared/entities/Column'
 import Task from '@/shared/entities/Task'
@@ -51,7 +47,19 @@ export const resolvers = {
   Mutation: {
     createTask: async (
       _: never,
-      task: Task,
+      {
+        id,
+        title,
+        columnId,
+        content,
+        order,
+      }: {
+        id: Task['id']
+        title: Task['title']
+        columnId: Task['columnId']
+        content?: Task['content']
+        order?: Task['order']
+      },
       context: { authUser?: AuthUser }
     ): Promise<{ success: boolean }> => {
       if (!context.authUser) {
@@ -59,7 +67,11 @@ export const resolvers = {
       }
 
       const result = new CreateTaskUsecase().execute({
-        task,
+        id,
+        title,
+        columnId,
+        content,
+        order,
         authUserId: context.authUser.id,
       })
 
@@ -86,7 +98,14 @@ export const resolvers = {
         title,
         content,
         order,
-      }: { id: string; title: string; content?: string; order?: number },
+        columnId,
+      }: {
+        id: Task['id']
+        title: Task['title']
+        content?: Task['content']
+        order?: Task['order']
+        columnId?: Task['columnId']
+      },
       context: { authUser?: AuthUser }
     ) => {
       if (!context.authUser) {
@@ -98,20 +117,7 @@ export const resolvers = {
         title,
         content,
         order,
-        authUserId: context.authUser.id,
-      })
-    },
-    updateTasksOrder: async (
-      _: never,
-      { tasks }: { tasks: TaskOrderUpdateParamDTO[] },
-      context: { authUser?: AuthUser }
-    ) => {
-      if (!context.authUser) {
-        throw new Error('Authentication required')
-      }
-
-      return new UpdateTasksOrderUsecase().execute({
-        tasks,
+        columnId,
         authUserId: context.authUser.id,
       })
     },
@@ -148,7 +154,11 @@ export const resolvers = {
     },
     updateColumn: async (
       _: never,
-      { id, title, order }: { id: string; title: string; order?: number },
+      {
+        id,
+        title,
+        order,
+      }: { id: Column['id']; title: Column['title']; order?: Column['order'] },
       context: { authUser?: AuthUser }
     ) => {
       if (!context.authUser) {
@@ -159,20 +169,6 @@ export const resolvers = {
         id,
         title,
         order,
-        authUserId: context.authUser.id,
-      })
-    },
-    updateColumnsOrder: async (
-      _: never,
-      { columns }: { columns: ColumnOrderUpdateParamDTO[] },
-      context: { authUser?: AuthUser }
-    ) => {
-      if (!context.authUser) {
-        throw new Error('Authentication required')
-      }
-
-      return new UpdateColumnsOrderUsecase().execute({
-        columns,
         authUserId: context.authUser.id,
       })
     },

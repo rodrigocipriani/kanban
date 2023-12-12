@@ -1,17 +1,18 @@
 import { Id } from 'react-beautiful-dnd'
+import { Order, produceOrder } from '@/shared/types/Order'
 import Entity, { EntityProps } from './Entity'
 
 type Props = EntityProps & {
   id?: Id
   title: string
-  order?: number
+  order: Order
   content?: string
   columnId: Id
 }
 
 export default class Task extends Entity {
   readonly title: string
-  readonly order: number
+  readonly order: Order
   readonly content?: string
   readonly columnId: Id
 
@@ -19,7 +20,7 @@ export default class Task extends Entity {
     super({ id: id })
 
     this.title = title
-    this.order = order || 9999
+    this.order = order
     this.content = content
     this.columnId = columnId
   }

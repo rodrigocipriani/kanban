@@ -48,7 +48,7 @@ export default class CreateColumnService extends Service<
 }
 
 const CreateColumnMutation = gql`
-  mutation CreateColumnMutation($id: ID!, $title: String!, $order: Int) {
+  mutation CreateColumnMutation($id: ID!, $title: String!, $order: String) {
     createColumn(id: $id, title: $title, order: $order) {
       success
     }

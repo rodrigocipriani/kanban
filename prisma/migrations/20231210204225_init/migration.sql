@@ -16,7 +16,7 @@ CREATE TABLE "User" (
 CREATE TABLE "Column" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "title" TEXT NOT NULL,
-    "order" INTEGER DEFAULT 9999,
+    "order" TEXT NOT NULL DEFAULT 'a',
     "createdByUserId" TEXT NOT NULL,
     "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME,
@@ -29,7 +29,7 @@ CREATE TABLE "Task" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "title" TEXT NOT NULL,
     "content" TEXT,
-    "order" INTEGER DEFAULT 9999,
+    "order" TEXT NOT NULL DEFAULT 'a',
     "columnId" TEXT NOT NULL,
     "createdByUserId" TEXT NOT NULL,
     "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP,

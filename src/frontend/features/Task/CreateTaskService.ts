@@ -5,7 +5,11 @@ import Service, { ServiceResponse } from '@/frontend/models/Service'
 import Task from '@/shared/entities/Task'
 
 type CreateTaskRequest = {
-  task: Task
+  id?: Task['id']
+  title: Task['title']
+  columnId: Task['columnId']
+  content?: Task['content']
+  order?: Task['order']
 }
 
 type CreateTaskResponse = {
@@ -21,14 +25,24 @@ export default class CreateTaskService extends Service<
   }
 
   async execute({
-    task,
+    id,
+    title,
+    columnId,
+    content,
+    order,
   }: CreateTaskRequest): Promise<ServiceResponse<CreateTaskResponse>> {
     try {
       const result = await apolloClient.mutate<{
         createTask: CreateTaskResponse
       }>({
         mutation: CreateTaskMutation,
-        variables: task,
+        variables: {
+          id,
+          title,
+          columnId,
+          content,
+          order,
+        },
       })
       return {
         data: {
@@ -49,11 +63,11 @@ export default class CreateTaskService extends Service<
 
 const CreateTaskMutation = gql`
   mutation CreateTaskMutation(
-    $id: ID!
+    $id: ID
     $title: String!
     $columnId: String!
     $content: String
-    $order: Int
+    $order: String
   ) {
     createTask(
       id: $id

@@ -40,14 +40,10 @@ export default class UpdateColumnUsecase extends Usecase<
       throw Error('Column ID is required')
     }
 
-    if (!title) {
-      throw Error('Title is required')
-    }
-
     const result = await this.columnRepository.update({
       id,
-      title,
-      order,
+      title: title || undefined,
+      order: order || undefined,
       authUserId: authUserId,
     })
 

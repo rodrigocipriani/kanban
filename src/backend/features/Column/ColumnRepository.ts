@@ -2,9 +2,9 @@ import appPrismaClient, {
   AppPrismaClient,
 } from '@/backend/infra/appPrismaClient'
 import Repository from '@/backend/models/Repository'
-import { ColumnOrderUpdateParamDTO } from '@/frontend/features/Column/ColumnOrderUpdateParamDTO'
 import Column from '@/shared/entities/Column'
 import User from '@/shared/entities/User'
+import { produceOrder } from '@/shared/types/Order'
 
 export default class ColumnRepository extends Repository<AppPrismaClient> {
   constructor({ client }: { client?: AppPrismaClient } = {}) {
@@ -39,9 +39,22 @@ export default class ColumnRepository extends Repository<AppPrismaClient> {
       throw Error('AuthUserId is required')
     }
 
+    const lastColumn = await this.client.column.findFirst({
+      where: {
+        createdByUserId: authUserId,
+        deletedAt: null,
+      },
+      orderBy: {
+        order: 'desc',
+      },
+    })
+
+    console.log('lastColumn', lastColumn)
+
     const newColumn = await this.client.column.create({
       data: {
         ...column,
+        order: lastColumn ? produceOrder(lastColumn.order) : produceOrder(),
         createdByUserId: authUserId,
       },
     })
@@ -68,43 +81,24 @@ export default class ColumnRepository extends Repository<AppPrismaClient> {
       throw Error('AuthUserId is required')
     }
 
+    if (!id) {
+      throw Error('Column ID is required')
+    }
+
+    if (!title && !order) {
+      throw Error('Either title or order should be provided')
+    }
+
     const updatedColumn = await this.client.column.update({
       where: { id, createdByUserId: authUserId },
       data: {
-        title,
-        order,
+        title: title || undefined,
+        order: order || undefined,
       },
     })
 
     return {
       success: !!updatedColumn,
-    }
-  }
-
-  async updateColumnsOrder({
-    columns,
-    authUserId,
-  }: {
-    columns: ColumnOrderUpdateParamDTO[]
-    authUserId: User['id']
-  }): Promise<{
-    success: boolean
-  }> {
-    if (!authUserId) {
-      throw Error('AuthUserId is required')
-    }
-
-    const updates = columns.map((column) => {
-      return this.client.column.update({
-        where: { id: column.id },
-        data: { order: column.order },
-      })
-    })
-
-    await this.client.$transaction(updates)
-
-    return {
-      success: !!(await this.client.$transaction(updates)),
     }
   }
 

@@ -51,7 +51,7 @@ export default class UpdateColumnService extends Service<
 }
 
 const UpdateColumnMutation = gql`
-  mutation UpdateColumnMutation($id: ID!, $title: String, $order: Int) {
+  mutation UpdateColumnMutation($id: ID!, $title: String, $order: String) {
     updateColumn(id: $id, title: $title, order: $order) {
       success
     }

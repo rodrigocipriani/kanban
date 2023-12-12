@@ -9,6 +9,7 @@ type UpdateTaskRequest = {
   title?: Task['title']
   content?: Task['content']
   order?: Task['order']
+  columnId?: Task['columnId']
 }
 
 type UpdateTaskResponse = {
@@ -28,13 +29,15 @@ export default class UpdateTaskService extends Service<
     title,
     content,
     order,
+    columnId,
   }: UpdateTaskRequest): Promise<ServiceResponse<UpdateTaskResponse>> {
     try {
+      console.log('UpdateTaskService.execute', { id, title, content, order })
       const result = await apolloClient.mutate<{
         updateTask: UpdateTaskResponse
       }>({
         mutation: UpdateTaskMutation,
-        variables: { id, title, content, order },
+        variables: { id, title, content, order, columnId },
       })
 
       return {
@@ -57,9 +60,16 @@ const UpdateTaskMutation = gql`
     $id: ID!
     $title: String
     $content: String
-    $order: Int
+    $order: String
+    $columnId: ID
   ) {
-    updateTask(id: $id, title: $title, content: $content, order: $order) {
+    updateTask(
+      id: $id
+      title: $title
+      content: $content
+      order: $order
+      columnId: $columnId
+    ) {
       success
     }
   }

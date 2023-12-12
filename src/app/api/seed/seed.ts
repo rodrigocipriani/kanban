@@ -1,4 +1,7 @@
 import appPrismaClient from '@/backend/infra/appPrismaClient'
+import Column from '@/shared/entities/Column'
+import Task from '@/shared/entities/Task'
+import { produceOrder } from '@/shared/types/Order'
 import { creativeColumns, creativeTasks } from './mockDB'
 
 async function seed() {
@@ -21,27 +24,58 @@ async function seed() {
 
     console.log('Added admin', admin)
 
+    let prevColumn: Column | undefined
     for (const column of creativeColumns) {
+      const conlumnObject = new Column({
+        ...column,
+        order: produceOrder(prevColumn?.order, undefined),
+      })
+
       const addedColumn = await appPrismaClient.column.create({
         data: {
-          ...column,
+          ...conlumnObject,
           createdByUserId: admin.id,
+          order: conlumnObject.order,
         },
       })
+
+      prevColumn = conlumnObject
 
       console.log('Added column', addedColumn)
     }
 
+    // group tasks by columnId
+    const tasksByColumnId: Record<string, Task[]> = {}
     for (const task of creativeTasks) {
-      const addedTask = await appPrismaClient.task.create({
-        data: {
-          ...task,
-          createdByUserId: admin.id,
-          columnId: task.columnId,
-        },
-      })
+      if (!tasksByColumnId[task.columnId]) {
+        tasksByColumnId[task.columnId] = []
+      }
 
-      console.log('Added task', addedTask)
+      tasksByColumnId[task.columnId].push(task)
+    }
+
+    for (const columnId in tasksByColumnId) {
+      let prevTask: Task | undefined
+      for (const task of tasksByColumnId[columnId]) {
+        const taskObject = new Task({
+          ...task,
+          id: undefined,
+          order: produceOrder(prevTask?.order, undefined),
+        })
+
+        const addedTask = await appPrismaClient.task.create({
+          data: {
+            ...taskObject,
+            createdByUserId: admin.id,
+            columnId: task.columnId,
+            order: taskObject.order,
+          },
+        })
+
+        console.log('Added task', addedTask)
+
+        prevTask = taskObject
+      }
     }
   } catch (e) {
     console.error(e)
